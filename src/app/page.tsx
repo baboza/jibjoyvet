@@ -15,7 +15,8 @@ import {
   Clock,
   Radio,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  Heart
 } from "lucide-react";
 
 // Google icon component
@@ -57,7 +58,7 @@ export default function Home() {
       {/* ── Ambient Glowing Orbs (Virus Go Signature Glow) ── */}
       <div className="fixed top-[-100px] left-[-80px] w-[550px] h-[550px] rounded-full bg-cyan-500/15 blur-[140px] pointer-events-none -z-0 animate-pulse" />
       <div className="fixed top-[30%] right-[-100px] w-[500px] h-[500px] rounded-full bg-purple-500/15 blur-[150px] pointer-events-none -z-0" />
-      <div className="fixed bottom-[-100px] left-[20%] w-[550px] h-[550px] rounded-full bg-emerald-500/10 blur-[140px] pointer-events-none -z-0" />
+      <div className="fixed bottom-[-100px] left-[20%] w-[550px] h-[550px] rounded-full bg-amber-500/10 blur-[140px] pointer-events-none -z-0" />
 
       <div className="relative z-10 flex-grow">
         {/* ── TOP NAV ── */}
@@ -111,7 +112,7 @@ export default function Home() {
 
           <p className="text-slate-300 text-sm sm:text-lg leading-relaxed max-w-2xl mx-auto font-normal px-2">
             แพลตฟอร์มการจัดการเรียนการสอนและเช็คชื่อเข้าชั้นเรียนด้วยพิกัด GPS ความแม่นยำสูง
-            ควบคู่กับระบบเกมการเรียนรู้ไวรัสวิทยา สำหรับนิสิตและคณาจารย์คณะสัตวแพทยศาสตร์ มหาวิทยาลัยมหาสารคาม
+            ควบคู่กับระบบเกมการเรียนรู้ไวรัสวิทยาและเกมจำลองการดูแลสัตว์เลี้ยง 3D สำหรับนิสิตและคณาจารย์คณะสัตวแพทยศาสตร์ มหาวิทยาลัยมหาสารคาม
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-8">
@@ -119,7 +120,7 @@ export default function Home() {
               { icon: MapPin, label: "GPS Attendance", color: "text-cyan-400" },
               { icon: BarChart3, label: "Live Analytics", color: "text-emerald-400" },
               { icon: Gamepad2, label: "Virus Go Games", color: "text-purple-400" },
-              { icon: Clock, label: "Instant Status", color: "text-amber-400" },
+              { icon: Heart, label: "VetSim 3D Pets", color: "text-amber-400" },
             ].map(({ icon: Icon, label, color }) => (
               <span
                 key={label}
@@ -133,9 +134,10 @@ export default function Home() {
         </section>
 
         {/* ── MODULE CARDS ── */}
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-20 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          
           {/* Card 1: Vet Checkin */}
-          <div className="group relative rounded-3xl glass bg-slate-900/75 border border-cyan-500/30 hover:border-cyan-400/80 transition-all duration-300 shadow-2xl overflow-hidden hover:-translate-y-1">
+          <div className="group relative rounded-3xl glass bg-slate-900/75 border border-cyan-500/30 hover:border-cyan-400/80 transition-all duration-300 shadow-2xl overflow-hidden hover:-translate-y-1 flex flex-col justify-between">
             {/* Top gradient accent line */}
             <div className="h-1 bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400" />
             <div className="absolute top-0 right-0 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -149,7 +151,7 @@ export default function Home() {
                   </div>
                   <div className="inline-flex items-center gap-1.5 bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    Live & Ready
+                    Live &amp; Ready
                   </div>
                 </div>
 
@@ -182,7 +184,7 @@ export default function Home() {
                   className="relative w-full bg-slate-950 hover:bg-slate-900 border border-cyan-400/50 text-white font-extrabold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-xl active:scale-[0.98]"
                 >
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-300 text-sm tracking-wide">
-                    เข้าใช้งานระบบเช็คชื่อ — เข้าสู่ระบบ
+                    เข้าสู่ระบบเช็คชื่อ
                   </span>
                   <ArrowRight className="w-4 h-4 text-cyan-400" />
                 </button>
@@ -191,7 +193,7 @@ export default function Home() {
           </div>
 
           {/* Card 2: Virus Go */}
-          <div className="group relative rounded-3xl glass bg-slate-900/75 border border-purple-500/30 hover:border-purple-400/80 transition-all duration-300 shadow-2xl overflow-hidden hover:-translate-y-1">
+          <div className="group relative rounded-3xl glass bg-slate-900/75 border border-purple-500/30 hover:border-purple-400/80 transition-all duration-300 shadow-2xl overflow-hidden hover:-translate-y-1 flex flex-col justify-between">
             {/* Top gradient accent line */}
             <div className="h-1 bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-500" />
             <div className="absolute top-0 right-0 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -240,13 +242,72 @@ export default function Home() {
                   className="relative w-full bg-slate-950 hover:bg-slate-900 border border-purple-400/50 text-white font-extrabold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-xl active:scale-[0.98]"
                 >
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-fuchsia-200 to-pink-300 text-sm tracking-wide">
-                    เปิดเล่น Virus Go (เว็บหลัก)
+                    เปิดเล่น Virus Go
                   </span>
                   <ExternalLink className="w-4 h-4 text-purple-400" />
                 </a>
               </div>
             </div>
           </div>
+
+          {/* Card 3: VetSim Home */}
+          <div className="group relative rounded-3xl glass bg-slate-900/75 border border-amber-500/30 hover:border-amber-400/80 transition-all duration-300 shadow-2xl overflow-hidden hover:-translate-y-1 flex flex-col justify-between">
+            {/* Top gradient accent line */}
+            <div className="h-1 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-400" />
+            <div className="absolute top-0 right-0 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="p-7 sm:p-8 relative z-10 flex flex-col justify-between h-full">
+              <div>
+                {/* Icon & Badge */}
+                <div className="flex items-center justify-between mb-5">
+                  <div className="w-14 h-14 bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/40 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20">
+                    <Heart className="w-7 h-7 text-amber-400 fill-amber-400/20" strokeWidth={2} />
+                  </div>
+                  <div className="inline-flex items-center gap-1.5 bg-amber-950/60 border border-amber-500/40 text-amber-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                    <Sparkles className="w-3 h-3 text-amber-400" />
+                    3D Simulation
+                  </div>
+                </div>
+
+                <h2 className="text-2xl font-black text-white mb-2 tracking-tight">
+                  เกมจำลองสัตว์เลี้ยง <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-300 to-yellow-300">VetSim Home</span>
+                </h2>
+                <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                  บ้านฟาร์มรักสัตว์เลี้ยง 3D จำลองการดูแล สุนัข แมว และกระต่าย เสมือนจริง ฝึกทักษะสังเกตอาการและดูแลสุขภาพสัตว์
+                </p>
+
+                <div className="space-y-2.5 mb-8">
+                  {[
+                    "แบบจำลอง 3D สุนัข • แมว • กระต่าย (Three.js)",
+                    "ฝึกให้อาหาร อาบน้ำแปรงขน และสังเกตพฤติกรรมสัตว์",
+                    "เซฟความคืบหน้าขึ้น Cloud ผ่าน Google Account",
+                  ].map((f) => (
+                    <div key={f} className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-300">
+                      <CheckCircle className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                      <span>{f}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <div className="relative group/btn w-full mt-2">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 rounded-2xl blur-md opacity-60 group-hover/btn:opacity-100 transition duration-300"></div>
+                <a
+                  href="https://vetpet-silk.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative w-full bg-slate-950 hover:bg-slate-900 border border-amber-400/50 text-white font-extrabold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-xl active:scale-[0.98]"
+                >
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-200 to-yellow-200 text-sm tracking-wide">
+                    เปิดเล่น VetSim Home (3D Farm)
+                  </span>
+                  <ExternalLink className="w-4 h-4 text-amber-400" />
+                </a>
+              </div>
+            </div>
+          </div>
+
         </section>
       </div>
 
