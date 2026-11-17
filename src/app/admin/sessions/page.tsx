@@ -160,19 +160,27 @@ export default function AdminSessionsPage() {
           prev.map((s) => s.id === editingId ? { ...s, ...data } : s)
         );
       } else {
-        const newDoc = await addDoc(collection(db, "subjects"), {
+        const ref = await addDoc(collection(db, "subjects"), {
           ...data,
-          createdAt: new Date().toLocaleString("th-TH"),
+          createdAt: new Date().toISOString(),
         });
-        setSubjects((prev) =>
-          [...prev, { id: newDoc.id, ...data, totalSessions: 0, activeSessions: 0, totalCheckins: 0, totalLate: 0, totalEnrolled: 0 }]
-            .sort((a, b) => a.code.localeCompare(b.code))
-        );
+        setSubjects((prev) => [
+          ...prev,
+          {
+            id: ref.id,
+            ...data,
+            totalSessions: 0,
+            activeSessions: 0,
+            totalCheckins: 0,
+            totalLate: 0,
+            totalEnrolled: 0,
+          },
+        ].sort((a, b) => a.code.localeCompare(b.code)));
       }
       closeForm();
     } catch (err) {
       console.error(err);
-      setFormError("เกิดข้อผิดพลาด กรุณาลองใหม่");
+      setFormError("บันทึกไม่สำเร็จ กรุณาลองใหม่");
     } finally {
       setSaving(false);
     }
@@ -198,198 +206,224 @@ export default function AdminSessionsPage() {
 
   return (
     <AppLayout>
-      <div className="max-w-5xl mx-auto px-4 py-6">
+      <div className="relative min-h-[calc(100vh-4rem)] bg-slate-950 text-slate-200 overflow-x-hidden pb-12">
+        {/* Ambient Glowing Orbs */}
+        <div className="absolute top-[3%] left-[10%] w-[45%] h-[45%] rounded-full bg-cyan-500/10 blur-[140px] pointer-events-none -z-0" />
+        <div className="absolute top-[35%] right-[10%] w-[35%] h-[35%] rounded-full bg-purple-500/10 blur-[150px] pointer-events-none -z-0" />
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <GraduationCap className="w-5 h-5 text-pink-500" />
-            <h2 className="text-lg font-bold text-gray-700">รายวิชาทั้งหมด</h2>
-            <span className="text-sm text-gray-400">({subjects.length} วิชา)</span>
-          </div>
-          <button
-            onClick={openAddForm}
-            className="flex items-center gap-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-xl text-sm transition-colors shadow-sm"
-          >
-            <Plus className="w-4 h-4" />
-            เพิ่มรายวิชา
-          </button>
-        </div>
+        <div className="relative z-10 max-w-5xl mx-auto px-4 py-6">
 
-        {/* Add/Edit Modal */}
-        {showForm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md">
-              {/* Modal header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-100">
-                <h3 className="text-lg font-bold text-gray-800">
-                  {editingId ? "แก้ไขรายวิชา" : "เพิ่มรายวิชาใหม่"}
-                </h3>
-                <button onClick={closeForm} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400">
-                  <X className="w-5 h-5" />
-                </button>
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                <GraduationCap className="w-4 h-4" />
               </div>
-
-              {/* Form body */}
-              <div className="p-6 space-y-4">
-                {/* Code */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">รหัสวิชา</label>
-                  <input
-                    type="text"
-                    value={form.code}
-                    onChange={(e) => setForm({ ...form, code: e.target.value })}
-                    placeholder="เช่น 1801 311"
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-pink-400 text-sm font-mono"
-                  />
-                </div>
-
-                {/* Name */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">ชื่อวิชา</label>
-                  <input
-                    type="text"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    placeholder="เช่น วิทยาไวรัสทางสัตวแพทย์"
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-pink-400 text-sm"
-                  />
-                </div>
-
-                {/* Term */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">ภาคเรียน</label>
-                  <input
-                    type="text"
-                    value={form.term}
-                    onChange={(e) => setForm({ ...form, term: e.target.value })}
-                    placeholder="เช่น 1/2569"
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-pink-400 text-sm"
-                  />
-                </div>
-
-                {/* Error */}
-                {formError && (
-                  <div className="flex items-center gap-2 bg-red-50 text-red-600 rounded-xl px-4 py-3 text-sm">
-                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                    {formError}
-                  </div>
-                )}
-              </div>
-
-              {/* Footer */}
-              <div className="flex gap-3 p-6 pt-0">
-                <button
-                  onClick={closeForm}
-                  className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium transition-colors"
-                >
-                  ยกเลิก
-                </button>
-                <button
-                  onClick={handleSave}
-                  disabled={saving}
-                  className="flex-1 py-2.5 rounded-xl bg-pink-500 hover:bg-pink-600 text-white text-sm font-bold transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
-                >
-                  {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                  {editingId ? "บันทึกการแก้ไข" : "เพิ่มรายวิชา"}
-                </button>
+              <div>
+                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                  รายวิชาทั้งหมด
+                  <span className="text-xs font-mono font-normal text-slate-400">({subjects.length} วิชา)</span>
+                </h2>
+                <p className="text-xs text-slate-400">จัดการข้อมูลรายวิชาและคลาสเรียนประจำภาคเรียน</p>
               </div>
             </div>
-          </div>
-        )}
-
-        {/* Subject Cards */}
-        {loading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 text-pink-400 animate-spin" />
-          </div>
-        ) : subjects.length === 0 ? (
-          <div className="bg-white rounded-2xl p-12 text-center border border-pink-100">
-            <GraduationCap className="w-12 h-12 text-pink-200 mx-auto mb-3" />
-            <p className="text-gray-500 font-medium">ยังไม่มีรายวิชา</p>
-            <button onClick={openAddForm} className="mt-4 text-sm text-pink-500 font-semibold underline">
-              เพิ่มวิชาแรก
+            <button
+              onClick={openAddForm}
+              className="flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-extrabold px-4 py-2 rounded-xl text-xs transition-all shadow-[0_0_15px_rgba(6,182,212,0.25)] active:scale-95"
+            >
+              <Plus className="w-4 h-4" />
+              เพิ่มรายวิชา
             </button>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {subjects.map((s) => (
-              <div key={s.id} className="bg-white rounded-2xl shadow-sm border border-pink-100 hover:shadow-md transition-shadow overflow-hidden group">
-                {/* Card Header */}
-                <div className="bg-gradient-to-r from-pink-500 to-pink-400 px-5 py-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-white font-bold text-base">{s.code}</p>
-                      <p className="text-pink-100 text-xs mt-0.5 leading-relaxed line-clamp-2">{s.name}</p>
+
+          {/* Add/Edit Modal */}
+          {showForm && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+              <div className="glass bg-slate-950/95 border border-cyan-500/40 rounded-3xl shadow-[0_0_50px_rgba(6,182,212,0.25)] w-full max-w-md overflow-hidden relative">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
+
+                {/* Modal header */}
+                <div className="flex items-center justify-between p-6 border-b border-slate-800">
+                  <h3 className="text-base font-bold text-white">
+                    {editingId ? "แก้ไขรายวิชา" : "เพิ่มรายวิชาใหม่"}
+                  </h3>
+                  <button onClick={closeForm} className="p-1.5 rounded-xl hover:bg-slate-900 text-slate-400 hover:text-white transition-colors">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Form body */}
+                <div className="p-6 space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase font-mono">รหัสวิชา</label>
+                    <input
+                      type="text"
+                      value={form.code}
+                      onChange={(e) => setForm({ ...form, code: e.target.value })}
+                      placeholder="เช่น 1801 311"
+                      className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 focus:outline-none focus:border-cyan-400 text-sm font-mono text-white placeholder-slate-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase font-mono">ชื่อวิชา</label>
+                    <input
+                      type="text"
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      placeholder="เช่น ไวรัสวิทยาสัตวแพทย์"
+                      className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 focus:outline-none focus:border-cyan-400 text-sm text-white placeholder-slate-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase font-mono">ภาคเรียน</label>
+                    <input
+                      type="text"
+                      value={form.term}
+                      onChange={(e) => setForm({ ...form, term: e.target.value })}
+                      placeholder="เช่น 1/2569"
+                      className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 focus:outline-none focus:border-cyan-400 text-sm font-mono text-white placeholder-slate-500"
+                    />
+                  </div>
+
+                  {formError && (
+                    <div className="flex items-center gap-2 text-rose-400 text-xs bg-rose-950/40 border border-rose-500/30 p-3 rounded-xl">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      <span>{formError}</span>
                     </div>
-                    <div className="flex flex-col items-end gap-1.5 ml-3 flex-shrink-0">
-                      <span className="text-pink-200 text-xs">{s.term}</span>
-                      {s.activeSessions > 0 && (
-                        <span className="bg-green-400 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
-                          ACTIVE
-                        </span>
+                  )}
+
+                  <div className="flex gap-2.5 pt-2">
+                    <button
+                      type="button"
+                      onClick={closeForm}
+                      className="flex-1 py-2.5 rounded-xl border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-900 text-xs font-bold transition-colors"
+                    >
+                      ยกเลิก
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSave}
+                      disabled={saving}
+                      className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 text-xs font-extrabold transition-all shadow-md active:scale-95 disabled:opacity-50 flex items-center justify-center gap-1.5"
+                    >
+                      {saving ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>กำลังบันทึก...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Save className="w-4 h-4" />
+                          <span>บันทึก</span>
+                        </>
                       )}
-                      {/* Edit / Delete buttons */}
-                      <div className="flex gap-1 mt-1">
-                        <button
-                          onClick={(e) => { e.preventDefault(); openEditForm(s); }}
-                          className="p-1.5 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors"
-                          title="แก้ไข"
-                        >
-                          <Pencil className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={(e) => { e.preventDefault(); handleDelete(s.id, s.name, s.totalSessions); }}
-                          disabled={deletingId === s.id}
-                          className="p-1.5 bg-white/20 hover:bg-red-400/50 text-white rounded-lg transition-colors disabled:opacity-50"
-                          title="ลบ"
-                        >
-                          {deletingId === s.id
-                            ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            : <Trash2 className="w-3.5 h-3.5" />
-                          }
-                        </button>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Subject Cards */}
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-24 gap-3">
+              <div className="relative">
+                <div className="w-12 h-12 rounded-full border-2 border-cyan-500/20 border-t-cyan-400 animate-spin"></div>
+                <GraduationCap className="w-5 h-5 text-cyan-400 absolute inset-0 m-auto animate-pulse" />
+              </div>
+              <p className="text-xs font-mono text-slate-400 tracking-wider">กำลังโหลดรายวิชา...</p>
+            </div>
+          ) : subjects.length === 0 ? (
+            <div className="glass bg-slate-900/60 rounded-3xl p-12 text-center border border-slate-800 shadow-xl">
+              <GraduationCap className="w-12 h-12 text-cyan-400/40 mx-auto mb-3" />
+              <p className="text-slate-300 font-bold text-sm">ยังไม่มีรายวิชาในระบบ</p>
+              <button onClick={openAddForm} className="mt-3 text-xs text-cyan-400 hover:text-cyan-300 font-bold underline">
+                + เพิ่มวิชาแรก
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {subjects.map((s) => (
+                <div key={s.id} className="glass bg-slate-900/75 rounded-3xl border border-slate-800/90 hover:border-cyan-500/50 transition-all duration-300 shadow-xl overflow-hidden group">
+                  <div className="bg-slate-900/90 border-b border-slate-800 px-5 py-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1 min-w-0">
+                        <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-md bg-cyan-950/80 border border-cyan-500/30 text-cyan-300">
+                          {s.code}
+                        </span>
+                        <p className="text-white font-bold text-sm mt-1.5 leading-relaxed line-clamp-2 group-hover:text-cyan-200 transition-colors">
+                          {s.name}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end gap-1.5 ml-3 shrink-0">
+                        <span className="text-slate-400 text-xs font-mono">{s.term}</span>
+                        {s.activeSessions > 0 && (
+                          <span className="bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-bold font-mono animate-pulse">
+                            ACTIVE
+                          </span>
+                        )}
+                        <div className="flex gap-1 mt-1">
+                          <button
+                            onClick={(e) => { e.preventDefault(); openEditForm(s); }}
+                            className="p-1.5 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-cyan-300 rounded-lg transition-colors border border-slate-700/60"
+                            title="แก้ไข"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={(e) => { e.preventDefault(); handleDelete(s.id, s.name, s.totalSessions); }}
+                            disabled={deletingId === s.id}
+                            className="p-1.5 bg-slate-800/80 hover:bg-rose-950/80 text-slate-300 hover:text-rose-300 rounded-lg transition-colors border border-slate-700/60 disabled:opacity-50"
+                            title="ลบ"
+                          >
+                            {deletingId === s.id
+                              ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                              : <Trash2 className="w-3.5 h-3.5" />
+                            }
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
+
+                  <Link href={`/admin/sessions/subject/${s.id}`} className="block p-5 hover:bg-slate-900/50 transition-colors">
+                    <div className="grid grid-cols-4 gap-2 mb-3 font-mono">
+                      <div className="text-center p-2 rounded-xl bg-slate-950/60 border border-slate-800/60">
+                        <p className="text-lg font-bold text-white">{s.totalSessions}</p>
+                        <p className="text-[10px] text-slate-400 font-sans">คลาส</p>
+                      </div>
+                      <div className="text-center p-2 rounded-xl bg-slate-950/60 border border-slate-800/60">
+                        <p className="text-lg font-bold text-cyan-300">{s.totalEnrolled}</p>
+                        <p className="text-[10px] text-slate-400 font-sans">นิสิต</p>
+                      </div>
+                      <div className="text-center p-2 rounded-xl bg-slate-950/60 border border-slate-800/60">
+                        <p className="text-lg font-bold text-emerald-400">{s.totalCheckins - s.totalLate}</p>
+                        <p className="text-[10px] text-slate-400 font-sans">ทันเวลา</p>
+                      </div>
+                      <div className="text-center p-2 rounded-xl bg-slate-950/60 border border-slate-800/60">
+                        <p className="text-lg font-bold text-amber-400">{s.totalLate}</p>
+                        <p className="text-[10px] text-slate-400 font-sans">สาย</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-3 border-t border-slate-800/80">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                        <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
+                        <span>{s.totalSessions} คลาสเรียน</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-xs text-cyan-400 font-bold group-hover:translate-x-1 transition-transform">
+                        <span>ดูคลาสเรียน</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </div>
+                    </div>
+                  </Link>
                 </div>
-
-                {/* Card body with stats + link */}
-                <Link href={`/admin/sessions/subject/${s.id}`} className="block p-5">
-                  <div className="grid grid-cols-4 gap-2 mb-3">
-                    <div className="text-center">
-                      <p className="text-lg font-bold text-gray-800">{s.totalSessions}</p>
-                      <p className="text-[10px] text-gray-400">คลาส</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-lg font-bold text-gray-800">{s.totalEnrolled}</p>
-                      <p className="text-[10px] text-gray-400">นิสิต</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-lg font-bold text-green-600">{s.totalCheckins - s.totalLate}</p>
-                      <p className="text-[10px] text-gray-400">ทันเวลา</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-lg font-bold text-amber-500">{s.totalLate}</p>
-                      <p className="text-[10px] text-gray-400">สาย</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                    <div className="flex items-center gap-1 text-xs text-gray-400">
-                      <BookOpen className="w-3.5 h-3.5" />
-                      <span>{s.totalSessions} คลาสเรียน</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-xs text-pink-500 font-medium">
-                      ดูคลาสเรียน
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </AppLayout>
   );

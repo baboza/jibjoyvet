@@ -14,43 +14,51 @@ function StudentNav({ onLogout, user }: { onLogout: () => void; user: any }) {
 
   return (
     <>
-      <nav className="bg-white border-b border-pink-100 sticky top-0 z-50">
-        <div className="max-w-xl mx-auto px-4 flex items-center justify-between h-14">
-          <div className="flex items-center gap-1">
-            <div className="w-7 h-7 bg-pink-500 rounded-lg flex items-center justify-center">
-              <MapPin className="w-4 h-4 text-white" />
+      <nav className="bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 sticky top-0 z-50 transition-all">
+        <div className="max-w-xl mx-auto px-4 flex items-center justify-between h-16">
+          <Link href="/student/checkin" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-500/20 to-emerald-500/10 border border-cyan-500/40 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.3)] group-hover:scale-105 transition-transform">
+              <MapPin className="w-4 h-4 text-cyan-400" />
             </div>
-            <span className="font-bold text-pink-600 text-sm">ระบบเช็คชื่อ</span>
-          </div>
+            <div className="flex flex-col">
+              <span className="font-black text-sm tracking-tight text-white uppercase flex items-center gap-1">
+                VET<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">CHECK</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-300">GO</span>
+              </span>
+              <span className="text-[9px] text-slate-400 uppercase tracking-widest font-mono">MSU SMART GPS</span>
+            </div>
+          </Link>
           
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-2">
             {navItems.map(({ href, label, icon: Icon }) => {
               const isActive = pathname === href || pathname.startsWith(href + "/");
               return (
                 <Link
                   key={href}
                   href={href}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                    isActive ? "bg-pink-100 text-pink-600" : "text-gray-500 hover:text-pink-500"
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    isActive
+                      ? "bg-slate-900 border border-cyan-500/40 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.25)]"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-3.5 h-3.5" />
                   {label}
                 </Link>
               );
             })}
-            <div className="h-6 w-px bg-gray-200 mx-2"></div>
-            <div className="flex items-center gap-2 mr-2">
+            <div className="h-5 w-px bg-slate-800 mx-2"></div>
+            <div className="flex items-center gap-2 mr-1">
               {user?.photoURL ? (
-                <img src={user.photoURL} alt="Profile" className="w-7 h-7 rounded-full border border-gray-200 object-cover" />
+                <img src={user.photoURL} alt="Profile" className="w-7 h-7 rounded-full border border-cyan-500/40 object-cover ring-2 ring-cyan-500/20" />
               ) : (
-                <div className="w-7 h-7 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold text-xs">
+                <div className="w-7 h-7 rounded-full bg-slate-900 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold text-xs">
                   {user?.name?.charAt(0) || "S"}
                 </div>
               )}
             </div>
-            <button onClick={onLogout} className="p-2 text-gray-400 hover:text-red-400 transition-colors ml-1" title="ออกจากระบบ">
+            <button onClick={onLogout} className="p-2 text-slate-400 hover:text-rose-400 transition-colors" title="ออกจากระบบ">
               <LogOut className="w-4 h-4" />
             </button>
           </div>
@@ -58,34 +66,36 @@ function StudentNav({ onLogout, user }: { onLogout: () => void; user: any }) {
           {/* Mobile Nav Top Right */}
           <div className="flex md:hidden items-center gap-2">
             {user?.photoURL ? (
-              <img src={user.photoURL} alt="Profile" className="w-7 h-7 rounded-full border border-gray-200 object-cover" />
+              <img src={user.photoURL} alt="Profile" className="w-7 h-7 rounded-full border border-cyan-500/40 object-cover ring-2 ring-cyan-500/20" />
             ) : (
-              <div className="w-7 h-7 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold text-xs">
+              <div className="w-7 h-7 rounded-full bg-slate-900 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold text-xs">
                 {user?.name?.charAt(0) || "S"}
               </div>
             )}
-            <button onClick={onLogout} className="p-2 text-gray-400 hover:text-red-400 transition-colors" title="ออกจากระบบ">
-              <LogOut className="w-5 h-5" />
+            <button onClick={onLogout} className="p-2 text-slate-400 hover:text-rose-400 transition-colors" title="ออกจากระบบ">
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
       </nav>
 
       {/* Mobile Bottom Nav */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-pink-100 z-50 pb-safe">
-        <div className="flex justify-around items-center h-14">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-950/90 border-t border-slate-800/80 backdrop-blur-xl z-50 pb-safe">
+        <div className="flex justify-around items-center h-16">
           {navItems.map(({ href, label, icon: Icon }) => {
             const isActive = pathname === href || pathname.startsWith(href + "/");
             return (
               <Link
                 key={href}
                 href={href}
-                className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${
-                  isActive ? "text-pink-600" : "text-gray-400 hover:text-pink-500"
+                className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-all ${
+                  isActive ? "text-cyan-400 font-bold" : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                <Icon className={`w-5 h-5 ${isActive ? "fill-pink-50" : ""}`} />
-                <span className="text-[10px] font-medium">{label}</span>
+                <div className={`p-1.5 rounded-xl transition-all ${isActive ? "bg-cyan-500/15 border border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.3)]" : ""}`}>
+                  <Icon className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] tracking-wide">{label}</span>
               </Link>
             );
           })}
@@ -107,18 +117,24 @@ function AdminNav({ onLogout, user }: { onLogout: () => void; user: any }) {
 
   return (
     <>
-      <nav className="bg-white border-b border-pink-100 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-14">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-pink-500 rounded-lg flex items-center justify-center">
-              <MapPin className="w-4 h-4 text-white" />
+      <nav className="bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 sticky top-0 z-50 transition-all">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
+          <Link href="/admin" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-500/20 to-emerald-500/10 border border-cyan-500/40 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.3)] group-hover:scale-105 transition-transform">
+              <MapPin className="w-4 h-4 text-cyan-400" />
             </div>
-            <span className="font-bold text-pink-600 text-sm hidden sm:inline">ระบบเช็คชื่อ</span>
-            <span className="bg-pink-500 text-white text-[10px] px-1.5 py-0.5 rounded font-bold">ADMIN</span>
-          </div>
+            <div className="flex items-center gap-1.5">
+              <span className="font-black text-sm tracking-tight text-white uppercase hidden sm:inline">
+                VET<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">ADMIN</span>
+              </span>
+              <span className="bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 text-[10px] px-2 py-0.5 rounded-full font-bold font-mono">
+                CONTROL
+              </span>
+            </div>
+          </Link>
           
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-1.5">
             {navItems.map(({ href, label, icon: Icon }) => {
               const isActive = href === "/admin" 
                 ? pathname === "/admin" 
@@ -127,32 +143,32 @@ function AdminNav({ onLogout, user }: { onLogout: () => void; user: any }) {
                 <Link
                   key={href}
                   href={href}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     isActive
-                      ? "bg-pink-100 text-pink-600"
-                      : "text-gray-500 hover:text-pink-500"
+                      ? "bg-slate-900 border border-cyan-500/40 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.2)]"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/50"
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-3.5 h-3.5" />
                   {label}
                 </Link>
               );
             })}
             
-            <div className="h-6 w-px bg-gray-200 mx-2"></div>
+            <div className="h-5 w-px bg-slate-800 mx-2"></div>
 
-            <div className="flex items-center gap-2 mr-2">
+            <div className="flex items-center gap-2 mr-1">
               {user?.photoURL ? (
-                <img src={user.photoURL} alt="Profile" className="w-7 h-7 rounded-full border border-gray-200 object-cover" />
+                <img src={user.photoURL} alt="Profile" className="w-7 h-7 rounded-full border border-cyan-500/40 object-cover ring-2 ring-cyan-500/20" />
               ) : (
-                <div className="w-7 h-7 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold text-xs">
+                <div className="w-7 h-7 rounded-full bg-slate-900 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold text-xs">
                   {user?.name?.charAt(0) || "A"}
                 </div>
               )}
-              <span className="text-sm font-semibold text-gray-700 hidden lg:inline">{user?.name}</span>
+              <span className="text-xs font-semibold text-slate-300 hidden lg:inline">{user?.name}</span>
             </div>
 
-            <button onClick={onLogout} className="p-2 text-gray-400 hover:text-red-400 transition-colors ml-1" title="ออกจากระบบ">
+            <button onClick={onLogout} className="p-2 text-slate-400 hover:text-rose-400 transition-colors" title="ออกจากระบบ">
               <LogOut className="w-4 h-4" />
             </button>
           </div>
@@ -160,22 +176,22 @@ function AdminNav({ onLogout, user }: { onLogout: () => void; user: any }) {
           {/* Mobile Nav Top Right */}
           <div className="flex md:hidden items-center gap-2">
             {user?.photoURL ? (
-              <img src={user.photoURL} alt="Profile" className="w-7 h-7 rounded-full border border-gray-200 object-cover" />
+              <img src={user.photoURL} alt="Profile" className="w-7 h-7 rounded-full border border-cyan-500/40 object-cover ring-2 ring-cyan-500/20" />
             ) : (
-              <div className="w-7 h-7 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold text-xs">
+              <div className="w-7 h-7 rounded-full bg-slate-900 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold text-xs">
                 {user?.name?.charAt(0) || "A"}
               </div>
             )}
-            <button onClick={onLogout} className="p-2 text-gray-400 hover:text-red-400 transition-colors" title="ออกจากระบบ">
-              <LogOut className="w-5 h-5" />
+            <button onClick={onLogout} className="p-2 text-slate-400 hover:text-rose-400 transition-colors" title="ออกจากระบบ">
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
       </nav>
 
       {/* Mobile Bottom Nav */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-pink-100 z-50 pb-safe">
-        <div className="flex justify-around items-center h-14">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-950/90 border-t border-slate-800/80 backdrop-blur-xl z-50 pb-safe">
+        <div className="flex justify-around items-center h-16">
           {navItems.map(({ href, label, icon: Icon }) => {
             const isActive = href === "/admin" 
               ? pathname === "/admin" 
@@ -184,12 +200,14 @@ function AdminNav({ onLogout, user }: { onLogout: () => void; user: any }) {
               <Link
                 key={href}
                 href={href}
-                className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${
-                  isActive ? "text-pink-600" : "text-gray-400 hover:text-pink-500"
+                className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-all ${
+                  isActive ? "text-cyan-400 font-bold" : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                <Icon className={`w-5 h-5 ${isActive ? "fill-pink-50" : ""}`} />
-                <span className="text-[10px] font-medium">{label}</span>
+                <div className={`p-1.5 rounded-xl transition-all ${isActive ? "bg-cyan-500/15 border border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.3)]" : ""}`}>
+                  <Icon className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] tracking-wide">{label}</span>
               </Link>
             );
           })}
@@ -222,14 +240,14 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
 
   if (loading || !user) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-pink-50">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-pink-500"></div>
+      <div className="flex min-h-screen items-center justify-center bg-slate-950">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-cyan-400"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-pink-50 pb-16 md:pb-0">
+    <div className="min-h-screen bg-slate-950 text-slate-100 pb-16 md:pb-0 selection:bg-cyan-500/30 selection:text-white">
       {user.role === "admin" ? (
         <AdminNav onLogout={logout} user={user} />
       ) : (

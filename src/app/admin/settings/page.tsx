@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import { doc, getDoc, setDoc, getDocs, collection, query, where, deleteDoc, updateDoc, addDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, getDocs, collection, query, where, updateDoc, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/useAuth";
 import AppLayout from "@/components/AppLayout";
-import { Settings, Loader2, Save, Plus, CheckCircle2, Circle, AlertCircle, Users, Trash2, Mail, User } from "lucide-react";
+import { Settings, Loader2, Save, Plus, CheckCircle2, Circle, AlertCircle, Users, Trash2, Mail, User, ShieldCheck } from "lucide-react";
 
 export default function AdminSettingsPage() {
   const { user } = useAuth();
@@ -102,7 +102,7 @@ export default function AdminSettingsPage() {
     setError("");
 
     try {
-      const updatedTerms = [termValue, ...termsList].sort((a, b) => b.localeCompare(a)); // keep sorted roughly
+      const updatedTerms = [termValue, ...termsList].sort((a, b) => b.localeCompare(a));
       
       await setDoc(doc(db, "settings", "system"), {
         terms: updatedTerms,
@@ -194,187 +194,208 @@ export default function AdminSettingsPage() {
 
   return (
     <AppLayout>
-      <div className="max-w-5xl mx-auto px-4 py-6">
-        <div className="flex items-center gap-2 mb-6">
-          <Settings className="w-6 h-6 text-pink-500" />
-          <h2 className="text-lg font-bold text-gray-700">ตั้งค่าระบบ (ปีการศึกษา)</h2>
-        </div>
+      <div className="relative min-h-[calc(100vh-4rem)] bg-slate-950 text-slate-200 overflow-x-hidden pb-12">
+        {/* Ambient Glowing Orbs */}
+        <div className="absolute top-[3%] left-[10%] w-[45%] h-[45%] rounded-full bg-cyan-500/10 blur-[140px] pointer-events-none -z-0" />
+        <div className="absolute top-[35%] right-[10%] w-[35%] h-[35%] rounded-full bg-purple-500/10 blur-[150px] pointer-events-none -z-0" />
 
-        {error && (
-          <div className="bg-red-50 text-red-600 px-4 py-3 rounded-xl text-sm mb-4 flex items-center gap-2 border border-red-100">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
-            {error}
-          </div>
-        )}
-
-        {loading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 text-pink-400 animate-spin" />
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            {/* Left: Add New Term Form */}
-            <div className="bg-white rounded-3xl shadow-sm border border-pink-100 p-6 md:p-8 flex flex-col h-fit">
-              <h3 className="text-lg font-bold text-gray-800 mb-2">เพิ่มปีการศึกษาใหม่</h3>
-              <p className="text-sm text-gray-500 mb-6">เพิ่มภาคเรียนหรือปีการศึกษาใหม่เข้าสู่ระบบ เพื่อเตรียมความพร้อมสำหรับการสร้างคลาสเรียนในเทอมถัดไป</p>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">ปีการศึกษา / ภาคเรียน</label>
-                  <input
-                    type="text"
-                    value={newTerm}
-                    onChange={(e) => setNewTerm(e.target.value)}
-                    placeholder="เช่น 2/2569"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-pink-400 text-sm font-medium"
-                    onKeyDown={(e) => e.key === 'Enter' && handleAddNewTerm()}
-                  />
-                </div>
-                
-                <button
-                  onClick={handleAddNewTerm}
-                  disabled={adding || !newTerm.trim()}
-                  className="w-full bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
-                >
-                  {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                  บันทึกปีการศึกษาใหม่
-                </button>
-              </div>
+        <div className="relative z-10 max-w-5xl mx-auto px-4 py-6">
+          <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-slate-800">
+            <div className="w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+              <Settings className="w-4 h-4" />
             </div>
-
-            {/* Right: List of Terms and Set Current */}
-            <div className="bg-white rounded-3xl shadow-sm border border-pink-100 p-6 md:p-8 flex flex-col">
-              <h3 className="text-lg font-bold text-gray-800 mb-2">เลือกปีการศึกษาปัจจุบัน</h3>
-              <p className="text-sm text-gray-500 mb-6">คลิกเพื่อเลือกปีการศึกษาที่คุณต้องการให้เป็นค่าเริ่มต้นของระบบ ณ ปัจจุบัน</p>
-              
-              <div className="flex flex-col gap-3 flex-1 overflow-y-auto max-h-[400px] pr-2">
-                {termsList.length === 0 ? (
-                  <div className="text-center py-10 text-gray-400 text-sm border-2 border-dashed border-gray-100 rounded-xl">
-                    ยังไม่มีข้อมูลปีการศึกษาในระบบ
-                  </div>
-                ) : (
-                  termsList.map(term => (
-                    <button
-                      key={term}
-                      onClick={() => handleSetCurrentTerm(term)}
-                      disabled={savingCurrent !== null}
-                      className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all text-left ${
-                        currentTerm === term
-                          ? "border-pink-500 bg-pink-50"
-                          : "border-gray-100 hover:border-pink-200 hover:bg-gray-50"
-                      }`}
-                    >
-                      <span className={`font-bold ${currentTerm === term ? "text-pink-600" : "text-gray-700"}`}>
-                        ภาคเรียนที่ {term}
-                      </span>
-                      
-                      <div className="flex items-center justify-center w-6 h-6">
-                        {savingCurrent === term ? (
-                          <Loader2 className="w-5 h-5 text-pink-500 animate-spin" />
-                        ) : currentTerm === term ? (
-                          <CheckCircle2 className="w-6 h-6 text-pink-500 fill-pink-100" />
-                        ) : (
-                          <Circle className="w-6 h-6 text-gray-300" />
-                        )}
-                      </div>
-                    </button>
-                  ))
-                )}
-              </div>
+            <div>
+              <h2 className="text-lg font-bold text-white">ตั้งค่าระบบ (ปีการศึกษา & สิทธิ์ดูแล)</h2>
+              <p className="text-xs text-slate-400">จัดการภาคเรียนปัจจุบันและกำหนดสิทธิ์ผู้ดูแลระบบ</p>
             </div>
-
           </div>
 
-          {/* Admin Management Section */}
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            {/* Left: Add New Admin */}
-            <div className="bg-white rounded-3xl shadow-sm border border-pink-100 p-6 md:p-8">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-xl bg-pink-100 flex items-center justify-center text-pink-500">
-                  <User className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-800">เพิ่มผู้ดูแลระบบ (Admin)</h3>
-              </div>
-              <p className="text-sm text-gray-500 mb-6">ผู้ดูแลระบบจะสามารถจัดการคลาส นิสิต และการตั้งค่าได้</p>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">ชื่อ-นามสกุล</label>
-                  <input
-                    type="text"
-                    placeholder="เช่น จิรวัฒน์ สุราสา"
-                    value={newAdminName}
-                    onChange={(e) => setNewAdminName(e.target.value)}
-                    className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-400 focus:bg-white transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">อีเมล (ที่ล็อกอินด้วย Google)</label>
-                  <input
-                    type="email"
-                    placeholder="เช่น admin@msu.ac.th"
-                    value={newAdminEmail}
-                    onChange={(e) => setNewAdminEmail(e.target.value)}
-                    className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-400 focus:bg-white transition-colors"
-                  />
-                </div>
-                <button
-                  onClick={handleAddAdmin}
-                  disabled={addingAdmin || !newAdminName.trim() || !newAdminEmail.trim()}
-                  className="w-full bg-pink-500 hover:bg-pink-600 disabled:bg-pink-300 text-white font-bold py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 mt-2"
-                >
-                  {addingAdmin ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                  เพิ่มผู้ดูแลระบบ
-                </button>
-              </div>
+          {error && (
+            <div className="bg-rose-950/40 text-rose-300 border border-rose-500/30 px-4 py-3 rounded-2xl text-xs mb-6 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+              <span>{error}</span>
             </div>
+          )}
 
-            {/* Right: List of Admins */}
-            <div className="bg-white rounded-3xl shadow-sm border border-pink-100 p-6 md:p-8 flex flex-col">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-xl bg-pink-100 flex items-center justify-center text-pink-500">
-                  <Users className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-800">รายชื่อผู้ดูแลระบบทั้งหมด</h3>
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-24 gap-3">
+              <div className="relative">
+                <div className="w-12 h-12 rounded-full border-2 border-cyan-500/20 border-t-cyan-400 animate-spin"></div>
+                <Settings className="w-5 h-5 text-cyan-400 absolute inset-0 m-auto animate-pulse" />
               </div>
-              <p className="text-sm text-gray-500 mb-6">ผู้ดูแลระบบปัจจุบันในระบบ</p>
-              
-              <div className="flex flex-col gap-3 flex-1 overflow-y-auto max-h-[400px] pr-2">
-                {adminsList.map(admin => (
-                  <div key={admin.id} className="flex items-center justify-between p-4 rounded-2xl border border-gray-100 hover:bg-gray-50 transition-colors group">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold overflow-hidden">
-                        {admin.photoURL ? (
-                          <img src={admin.photoURL} alt="Admin" className="w-full h-full object-cover" />
-                        ) : (
-                          admin.name.charAt(0)
-                        )}
-                      </div>
-                      <div>
-                        <p className="font-bold text-gray-800 text-sm">{admin.name}</p>
-                        <p className="text-xs text-gray-500 flex items-center gap-1"><Mail className="w-3 h-3" /> {admin.email}</p>
-                      </div>
+              <p className="text-xs font-mono text-slate-400 tracking-wider">กำลังโหลดการตั้งค่า...</p>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Left: Add New Term Form */}
+                <div className="glass bg-slate-900/75 rounded-3xl border border-slate-800/90 p-6 md:p-8 flex flex-col h-fit shadow-xl">
+                  <h3 className="text-base font-bold text-white mb-1.5 flex items-center gap-2">
+                    <span>เพิ่มปีการศึกษาใหม่</span>
+                  </h3>
+                  <p className="text-xs text-slate-400 mb-6">
+                    เพิ่มภาคเรียนหรือปีการศึกษาใหม่เข้าสู่ระบบ เพื่อเตรียมความพร้อมสำหรับการสร้างคลาสเรียนในเทอมถัดไป
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase font-mono">
+                        ปีการศึกษา / ภาคเรียน
+                      </label>
+                      <input
+                        type="text"
+                        value={newTerm}
+                        onChange={(e) => setNewTerm(e.target.value)}
+                        placeholder="เช่น 2/2569"
+                        className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 focus:outline-none focus:border-cyan-400 text-sm font-mono text-white placeholder-slate-500"
+                        onKeyDown={(e) => e.key === 'Enter' && handleAddNewTerm()}
+                      />
                     </div>
-                    {user?.email !== admin.email && (
-                      <button
-                        onClick={() => handleRemoveAdmin(admin.id, admin.email)}
-                        className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors"
-                        title="ยกเลิกสิทธิ์"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                    
+                    <button
+                      onClick={handleAddNewTerm}
+                      disabled={adding || !newTerm.trim()}
+                      className="w-full bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 px-6 py-3 rounded-xl text-xs font-extrabold transition-all shadow-[0_0_15px_rgba(6,182,212,0.25)] flex items-center justify-center gap-2 disabled:opacity-50 active:scale-95"
+                    >
+                      {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                      <span>บันทึกปีการศึกษาใหม่</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Right: List of Terms and Set Current */}
+                <div className="glass bg-slate-900/75 rounded-3xl border border-slate-800/90 p-6 md:p-8 flex flex-col shadow-xl">
+                  <h3 className="text-base font-bold text-white mb-1.5">เลือกปีการศึกษาปัจจุบัน</h3>
+                  <p className="text-xs text-slate-400 mb-6">
+                    คลิกเพื่อเลือกปีการศึกษาที่คุณต้องการให้เป็นค่าเริ่มต้นของระบบ ณ ปัจจุบัน
+                  </p>
+                  
+                  <div className="flex flex-col gap-2.5 flex-1 overflow-y-auto max-h-[380px] pr-1">
+                    {termsList.length === 0 ? (
+                      <div className="text-center py-10 text-slate-500 text-xs border border-dashed border-slate-800 rounded-2xl">
+                        ยังไม่มีข้อมูลปีการศึกษาในระบบ
+                      </div>
+                    ) : (
+                      termsList.map((term) => (
+                        <button
+                          key={term}
+                          onClick={() => handleSetCurrentTerm(term)}
+                          disabled={savingCurrent !== null}
+                          className={`flex items-center justify-between p-3.5 rounded-2xl border transition-all text-left ${
+                            currentTerm === term
+                              ? "border-cyan-500/60 bg-cyan-950/30 shadow-[0_0_15px_rgba(6,182,212,0.15)]"
+                              : "border-slate-800/80 bg-slate-950/60 hover:border-slate-700 hover:bg-slate-900"
+                          }`}
+                        >
+                          <span className={`font-mono text-sm font-bold ${currentTerm === term ? "text-cyan-300" : "text-slate-300"}`}>
+                            ภาคเรียนที่ {term}
+                          </span>
+                          
+                          <div className="flex items-center justify-center w-6 h-6">
+                            {savingCurrent === term ? (
+                              <Loader2 className="w-4 h-4 text-cyan-400 animate-spin" />
+                            ) : currentTerm === term ? (
+                              <CheckCircle2 className="w-5 h-5 text-cyan-400" />
+                            ) : (
+                              <Circle className="w-5 h-5 text-slate-600" />
+                            )}
+                          </div>
+                        </button>
+                      ))
                     )}
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
 
-          </div>
-          </>
-        )}
+              {/* Admin Management Section */}
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Left: Add New Admin */}
+                <div className="glass bg-slate-900/75 rounded-3xl border border-slate-800/90 p-6 md:p-8 shadow-xl">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                      <User className="w-4 h-4" />
+                    </div>
+                    <h3 className="text-base font-bold text-white">เพิ่มผู้ดูแลระบบ (Admin)</h3>
+                  </div>
+                  <p className="text-xs text-slate-400 mb-6">ผู้ดูแลระบบจะสามารถจัดการคลาส นิสิต และการตั้งค่าได้</p>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase font-mono">ชื่อ-นามสกุล</label>
+                      <input
+                        type="text"
+                        placeholder="เช่น จิรวัฒน์ สุราสา"
+                        value={newAdminName}
+                        onChange={(e) => setNewAdminName(e.target.value)}
+                        className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl focus:outline-none focus:border-cyan-400 text-sm text-white placeholder-slate-500 transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase font-mono">อีเมล (ที่ล็อกอินด้วย Google)</label>
+                      <input
+                        type="email"
+                        placeholder="เช่น admin@msu.ac.th"
+                        value={newAdminEmail}
+                        onChange={(e) => setNewAdminEmail(e.target.value)}
+                        className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl focus:outline-none focus:border-cyan-400 text-sm font-mono text-white placeholder-slate-500 transition-colors"
+                      />
+                    </div>
+                    <button
+                      onClick={handleAddAdmin}
+                      disabled={addingAdmin || !newAdminName.trim() || !newAdminEmail.trim()}
+                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 disabled:opacity-50 text-white font-extrabold py-3 px-4 rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2 mt-2 active:scale-95"
+                    >
+                      {addingAdmin ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                      <span>เพิ่มผู้ดูแลระบบ</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Right: List of Admins */}
+                <div className="glass bg-slate-900/75 rounded-3xl border border-slate-800/90 p-6 md:p-8 flex flex-col shadow-xl">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                      <Users className="w-4 h-4" />
+                    </div>
+                    <h3 className="text-base font-bold text-white">รายชื่อผู้ดูแลระบบทั้งหมด</h3>
+                  </div>
+                  <p className="text-xs text-slate-400 mb-6">ผู้ดูแลระบบปัจจุบันในระบบ</p>
+                  
+                  <div className="flex flex-col gap-2.5 flex-1 overflow-y-auto max-h-[380px] pr-1">
+                    {adminsList.map((admin) => (
+                      <div key={admin.id} className="flex items-center justify-between p-3.5 rounded-2xl border border-slate-800/80 bg-slate-950/60 hover:bg-slate-900 transition-colors group">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-full bg-slate-900 border border-cyan-500/40 flex items-center justify-center text-cyan-300 font-bold overflow-hidden text-xs">
+                            {admin.photoURL ? (
+                              <img src={admin.photoURL} alt="Admin" className="w-full h-full object-cover" />
+                            ) : (
+                              admin.name.charAt(0)
+                            )}
+                          </div>
+                          <div>
+                            <p className="font-bold text-white text-xs">{admin.name}</p>
+                            <p className="text-[11px] text-slate-400 flex items-center gap-1 font-mono">
+                              <Mail className="w-3 h-3 text-cyan-400" /> {admin.email}
+                            </p>
+                          </div>
+                        </div>
+                        {user?.email !== admin.email && (
+                          <button
+                            onClick={() => handleRemoveAdmin(admin.id, admin.email)}
+                            className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-rose-950/50 rounded-xl transition-colors border border-transparent hover:border-rose-500/30"
+                            title="ยกเลิกสิทธิ์"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </AppLayout>
   );

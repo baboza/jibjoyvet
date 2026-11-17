@@ -3,8 +3,19 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
-  Loader2, MapPin, Gamepad2, Sparkles,
-  ArrowRight, CheckCircle, GraduationCap, BarChart3, ShieldCheck, Clock
+  Loader2,
+  MapPin,
+  Gamepad2,
+  Sparkles,
+  ArrowRight,
+  CheckCircle,
+  GraduationCap,
+  BarChart3,
+  ShieldCheck,
+  Clock,
+  Radio,
+  ExternalLink,
+  ChevronRight
 } from "lucide-react";
 
 // Google icon component
@@ -32,66 +43,89 @@ export default function Home() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-pink-50 via-white to-rose-50">
-        <Loader2 className="w-10 h-10 text-pink-400 animate-spin" />
+      <main className="flex min-h-screen items-center justify-center bg-slate-950">
+        <div className="relative">
+          <div className="w-14 h-14 rounded-full border-2 border-cyan-500/20 border-t-cyan-400 animate-spin"></div>
+          <Sparkles className="w-6 h-6 text-cyan-400 absolute inset-0 m-auto animate-pulse" />
+        </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50 relative overflow-hidden">
+    <main className="min-h-screen bg-slate-950 text-slate-200 relative overflow-x-hidden flex flex-col justify-between selection:bg-cyan-500/30 selection:text-white">
+      {/* ── Ambient Glowing Orbs (Virus Go Signature Glow) ── */}
+      <div className="fixed top-[-100px] left-[-80px] w-[550px] h-[550px] rounded-full bg-cyan-500/15 blur-[140px] pointer-events-none -z-0 animate-pulse" />
+      <div className="fixed top-[30%] right-[-100px] w-[500px] h-[500px] rounded-full bg-purple-500/15 blur-[150px] pointer-events-none -z-0" />
+      <div className="fixed bottom-[-100px] left-[20%] w-[550px] h-[550px] rounded-full bg-emerald-500/10 blur-[140px] pointer-events-none -z-0" />
 
-      {/* Ambient blobs */}
-      <div className="fixed top-[-120px] right-[-120px] w-[500px] h-[500px] rounded-full bg-pink-200/40 blur-3xl pointer-events-none -z-0" />
-      <div className="fixed bottom-[-100px] left-[-100px] w-[400px] h-[400px] rounded-full bg-rose-200/35 blur-3xl pointer-events-none -z-0" />
-      <div className="fixed top-1/2 right-1/3 w-[250px] h-[250px] rounded-full bg-pink-100/50 blur-2xl pointer-events-none -z-0" />
-
-      <div className="relative z-10">
-
-        {/* ── NAV ── */}
-        <nav className="flex items-center justify-between px-6 md:px-12 py-5 max-w-7xl mx-auto">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-rose-500 rounded-xl flex items-center justify-center shadow-md shadow-pink-200">
-              <Sparkles className="w-4 h-4 text-white" />
+      <div className="relative z-10 flex-grow">
+        {/* ── TOP NAV ── */}
+        <nav className="flex items-center justify-between px-6 md:px-12 py-5 max-w-7xl mx-auto border-b border-slate-800/60 backdrop-blur-md">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-gradient-to-br from-cyan-500/20 to-emerald-500/10 border border-cyan-500/40 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+              <Sparkles className="w-4 h-4 text-cyan-400" />
             </div>
-            <span className="font-black text-gray-800 text-lg tracking-tight">
-              Jibjoy<span className="text-pink-500">VetHub</span>
-            </span>
+            <div className="flex flex-col">
+              <span className="font-black text-white text-lg tracking-tight uppercase flex items-center gap-1">
+                JIBJOY<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">VET</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-300">HUB</span>
+              </span>
+              <span className="text-[9px] text-slate-400 uppercase tracking-widest font-mono hidden sm:inline">
+                Faculty of Veterinary Sciences · MSU
+              </span>
+            </div>
           </div>
-          <div className="hidden md:flex items-center gap-1.5 text-xs font-semibold text-gray-400">
-            <ShieldCheck className="w-3.5 h-3.5 text-green-400" />
-            Faculty of Veterinary Sciences · MSU
+
+          <div className="flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-1.5 text-xs font-semibold text-slate-400 bg-slate-900/60 border border-slate-800 px-3 py-1.5 rounded-full">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Smart GPS Campus Gateway</span>
+            </div>
+
+            <button
+              onClick={() => setShowLogin(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 text-xs font-bold transition-all shadow-[0_0_15px_rgba(6,182,212,0.15)] active:scale-95"
+            >
+              <span>เข้าสู่ระบบ</span>
+              <ChevronRight className="w-3.5 h-3.5 text-cyan-400" />
+            </button>
           </div>
         </nav>
 
-        {/* ── HERO ── */}
-        <section className="text-center px-6 pt-12 pb-20 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-pink-100 text-pink-600 text-xs font-bold px-4 py-2 rounded-full border border-pink-200 shadow-sm mb-8">
-            <Sparkles className="w-3.5 h-3.5" />
-            AI-Powered Vet Education Platform
+        {/* ── HERO SECTION ── */}
+        <section className="text-center px-4 sm:px-6 pt-12 sm:pt-16 pb-16 max-w-4xl mx-auto">
+          {/* Top Pill */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/80 border border-cyan-500/40 backdrop-blur-xl text-xs font-bold text-cyan-400 shadow-[0_0_25px_rgba(6,182,212,0.25)] uppercase tracking-wide mb-6">
+            <Radio className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+            <span>AI-POWERED VET EDUCATION PLATFORM</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-black text-gray-900 leading-tight tracking-tight mb-6">
-            Educational Tools for<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-500">
-              Veterinary Medicine
+          <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-black text-white leading-tight tracking-tight mb-6 uppercase drop-shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
+            VET<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">CHECK</span> &amp;{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-300 drop-shadow-[0_0_35px_rgba(16,185,129,0.5)]">
+              LEARNING
             </span>
           </h1>
 
-          <p className="text-gray-500 text-lg leading-relaxed max-w-xl mx-auto">
-            A comprehensive platform for veterinary students and faculty —
-            featuring AI-powered attendance tracking and game-based learning.
+          <p className="text-slate-300 text-sm sm:text-lg leading-relaxed max-w-2xl mx-auto font-normal px-2">
+            แพลตฟอร์มการจัดการเรียนการสอนและเช็คชื่อเข้าชั้นเรียนด้วยพิกัด GPS ความแม่นยำสูง
+            ควบคู่กับระบบเกมการเรียนรู้ไวรัสวิทยา สำหรับนิสิตและคณาจารย์คณะสัตวแพทยศาสตร์ มหาวิทยาลัยมหาสารคาม
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 mt-10">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-8">
             {[
-              { icon: MapPin, label: "GPS Check-in" },
-              { icon: BarChart3, label: "Analytics" },
-              { icon: Gamepad2, label: "Game Learning" },
-              { icon: Clock, label: "Real-time" },
-            ].map(({ icon: Icon, label }) => (
-              <span key={label} className="inline-flex items-center gap-1.5 bg-white text-gray-600 text-sm font-semibold px-4 py-2 rounded-xl border border-gray-100 shadow-sm">
-                <Icon className="w-4 h-4 text-pink-400" />
+              { icon: MapPin, label: "GPS Attendance", color: "text-cyan-400" },
+              { icon: BarChart3, label: "Live Analytics", color: "text-emerald-400" },
+              { icon: Gamepad2, label: "Virus Go Games", color: "text-purple-400" },
+              { icon: Clock, label: "Instant Status", color: "text-amber-400" },
+            ].map(({ icon: Icon, label, color }) => (
+              <span
+                key={label}
+                className="inline-flex items-center gap-1.5 bg-slate-900/60 border border-slate-800 text-slate-300 text-xs font-semibold px-3.5 py-1.5 rounded-xl shadow-sm backdrop-blur-sm"
+              >
+                <Icon className={`w-3.5 h-3.5 ${color}`} />
                 {label}
               </span>
             ))}
@@ -99,157 +133,193 @@ export default function Home() {
         </section>
 
         {/* ── MODULE CARDS ── */}
-        <section className="max-w-5xl mx-auto px-6 pb-24 grid grid-cols-1 md:grid-cols-2 gap-6">
-
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-20 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
           {/* Card 1: Vet Checkin */}
-          <div className="group relative bg-white/80 backdrop-blur-sm rounded-3xl border border-pink-100 shadow-xl shadow-pink-100/50 overflow-hidden hover:-translate-y-1 transition-all duration-300">
-            {/* Top gradient bar */}
-            <div className="h-1.5 bg-gradient-to-r from-pink-400 to-rose-500" />
+          <div className="group relative rounded-3xl glass bg-slate-900/75 border border-cyan-500/30 hover:border-cyan-400/80 transition-all duration-300 shadow-2xl overflow-hidden hover:-translate-y-1">
+            {/* Top gradient accent line */}
+            <div className="h-1 bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400" />
+            <div className="absolute top-0 right-0 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="p-8">
-              {/* Icon */}
-              <div className="w-14 h-14 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-pink-200 mb-6">
-                <MapPin className="w-7 h-7 text-white" strokeWidth={1.5} />
-              </div>
-
-              {/* Badge */}
-              <div className="inline-flex items-center gap-1.5 bg-green-50 text-green-600 text-xs font-bold px-2.5 py-1 rounded-full mb-4">
-                <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                Live & Ready
-              </div>
-
-              <h2 className="text-2xl font-black text-gray-900 mb-2">Vet Checkin</h2>
-              <p className="text-gray-500 text-sm leading-relaxed mb-6">
-                AI-powered GPS attendance system — track student check-ins, analyze statistics, and generate instant reports.
-              </p>
-
-              <div className="space-y-2.5 mb-8">
-                {["Precise GPS location check-in", "Analytics dashboard & statistics", "Mobile & PC friendly"].map(f => (
-                  <div key={f} className="flex items-center gap-2.5 text-sm text-gray-600">
-                    <CheckCircle className="w-4 h-4 text-pink-400 flex-shrink-0" />
-                    {f}
+            <div className="p-7 sm:p-8 relative z-10 flex flex-col justify-between h-full">
+              <div>
+                {/* Icon & Badge */}
+                <div className="flex items-center justify-between mb-5">
+                  <div className="w-14 h-14 bg-gradient-to-br from-cyan-500/20 to-emerald-500/10 border border-cyan-500/40 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                    <MapPin className="w-7 h-7 text-cyan-400" strokeWidth={2} />
                   </div>
-                ))}
+                  <div className="inline-flex items-center gap-1.5 bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Live & Ready
+                  </div>
+                </div>
+
+                <h2 className="text-2xl font-black text-white mb-2 tracking-tight">
+                  ระบบเช็คชื่อ <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-emerald-300">Vet Checkin</span>
+                </h2>
+                <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                  เช็คชื่อเข้าชั้นเรียนด้วยระบบพิกัด GPS ตรวจสอบรัศมีอัตโนมัติ คำนวณสถานะตรงเวลา/สาย พร้อมรายงานสถิติแบบเรียลไทม์
+                </p>
+
+                <div className="space-y-2.5 mb-8">
+                  {[
+                    "ตรวจสอบพิกัด GPS อัตโนมัติในรัศมีที่กำหนด",
+                    "เช็คชื่อทันใจ ไม่ต้องรอคิว ลดเวลาในห้องเรียน",
+                    "แดชบอร์ดสรุปสถิติสำหรับอาจารย์ผู้สอน",
+                  ].map((f) => (
+                    <div key={f} className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-300">
+                      <CheckCircle className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                      <span>{f}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <button
-                onClick={() => setShowLogin(true)}
-                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-pink-200 hover:shadow-pink-300 hover:scale-[1.02] active:scale-[0.98] duration-200"
-              >
-                Get Started — Vet Checkin
-                <ArrowRight className="w-4 h-4" />
-              </button>
+              {/* Action Button */}
+              <div className="relative group/btn w-full mt-2">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-2xl blur-md opacity-60 group-hover/btn:opacity-100 transition duration-300"></div>
+                <button
+                  onClick={() => setShowLogin(true)}
+                  className="relative w-full bg-slate-950 hover:bg-slate-900 border border-cyan-400/50 text-white font-extrabold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-xl active:scale-[0.98]"
+                >
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-300 text-sm tracking-wide">
+                    เข้าใช้งานระบบเช็คชื่อ — เข้าสู่ระบบ
+                  </span>
+                  <ArrowRight className="w-4 h-4 text-cyan-400" />
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Card 2: Virus Go */}
-          <div className="group relative rounded-3xl overflow-hidden hover:-translate-y-1 transition-all duration-300 shadow-xl shadow-slate-800/30">
-            {/* Dark background */}
-            <div className="absolute inset-0 bg-slate-950" />
-            {/* Glow effects */}
-            <div className="absolute top-0 left-1/4 w-3/4 h-1/2 rounded-full bg-cyan-500/20 blur-3xl pointer-events-none" />
-            <div className="absolute bottom-0 right-0 w-1/2 h-1/2 rounded-full bg-violet-500/15 blur-3xl pointer-events-none" />
-            {/* Top gradient bar */}
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-400 via-violet-500 to-pink-500" />
+          <div className="group relative rounded-3xl glass bg-slate-900/75 border border-purple-500/30 hover:border-purple-400/80 transition-all duration-300 shadow-2xl overflow-hidden hover:-translate-y-1">
+            {/* Top gradient accent line */}
+            <div className="h-1 bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-500" />
+            <div className="absolute top-0 right-0 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="relative p-8">
-              {/* Icon */}
-              <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-violet-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/30 mb-6">
-                <Gamepad2 className="w-7 h-7 text-white" strokeWidth={1.5} />
-              </div>
-
-              {/* Badge */}
-              <div className="inline-flex items-center gap-1.5 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold px-2.5 py-1 rounded-full mb-4 uppercase tracking-wide">
-                <Sparkles className="w-3 h-3" />
-                Game-Based Learning
-              </div>
-
-              <h2 className="text-2xl font-black text-white mb-2">Virus<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400"> Go</span></h2>
-              <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                The ultimate game-based learning platform — conquer Veterinary Virology through interactive missions, clinical cases, and outbreak simulations.
-              </p>
-
-              <div className="space-y-2.5 mb-8">
-                {["Lab Detective & Clinical Cases", "Multiplayer Classroom Battles", "Boss Virus Outbreak Simulation"].map(f => (
-                  <div key={f} className="flex items-center gap-2.5 text-sm text-slate-300">
-                    <CheckCircle className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                    {f}
+            <div className="p-7 sm:p-8 relative z-10 flex flex-col justify-between h-full">
+              <div>
+                {/* Icon & Badge */}
+                <div className="flex items-center justify-between mb-5">
+                  <div className="w-14 h-14 bg-gradient-to-br from-purple-500/20 to-fuchsia-500/10 border border-purple-500/40 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/20">
+                    <Gamepad2 className="w-7 h-7 text-purple-400" strokeWidth={2} />
                   </div>
-                ))}
+                  <div className="inline-flex items-center gap-1.5 bg-purple-950/60 border border-purple-500/40 text-purple-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                    <Sparkles className="w-3 h-3 text-purple-400" />
+                    Gamified Learning
+                  </div>
+                </div>
+
+                <h2 className="text-2xl font-black text-white mb-2 tracking-tight">
+                  เกมการเรียนรู้ <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Virus Go</span>
+                </h2>
+                <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                  แพลตฟอร์ม Game-Based Learning เปลี่ยน 15 บทเรียนวิชาไวรัสวิทยาสัตวแพทย์ให้เป็นภารกิจเกมสุดท้าทาย สนุก กระชับ ตอบทันใจ
+                </p>
+
+                <div className="space-y-2.5 mb-8">
+                  {[
+                    "ภารกิจแล็บสืบสวนโรคและเคสทางคลินิก (Lab Detective)",
+                    "ระบบแข่งขันตอบคำถามในห้องเรียนแบบเรียลไทม์",
+                    "จำลองการระบาดของไวรัสเพื่อฝึกวางแผนรับมือ",
+                  ].map((f) => (
+                    <div key={f} className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-300">
+                      <CheckCircle className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                      <span>{f}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <a
-                href="https://virusgo.vercel.app"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-[0.98] duration-200"
-              >
-                Launch Virus Go
-                <ArrowRight className="w-4 h-4" />
-              </a>
+              {/* Action Button */}
+              <div className="relative group/btn w-full mt-2">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-fuchsia-500 rounded-2xl blur-md opacity-60 group-hover/btn:opacity-100 transition duration-300"></div>
+                <a
+                  href="https://virusgo.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative w-full bg-slate-950 hover:bg-slate-900 border border-purple-400/50 text-white font-extrabold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-xl active:scale-[0.98]"
+                >
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-fuchsia-200 to-pink-300 text-sm tracking-wide">
+                    เปิดเล่น Virus Go (เว็บหลัก)
+                  </span>
+                  <ExternalLink className="w-4 h-4 text-purple-400" />
+                </a>
+              </div>
             </div>
           </div>
-
         </section>
-
-        {/* ── FOOTER ── */}
-        <footer className="text-center pb-10 px-6">
-          <div className="flex flex-col items-center gap-1 mb-3">
-            <div className="flex items-center gap-2">
-              <GraduationCap className="w-4 h-4 text-pink-400" />
-              <span className="text-sm font-bold text-gray-600">Faculty of Veterinary Sciences, Mahasarakham University</span>
-            </div>
-            <p className="text-xs text-gray-400">Developed by <span className="font-semibold text-pink-500">DVM Wilasinee Surasa</span></p>
-          </div>
-          <p className="text-xs text-gray-300">© 2024 · Powered by AI · All rights reserved</p>
-        </footer>
-
       </div>
 
-      {/* ── LOGIN MODAL ── */}
+      {/* ── FOOTER ── */}
+      <footer className="text-center py-8 px-6 border-t border-slate-800/80 backdrop-blur-md">
+        <div className="flex flex-col items-center gap-1.5 mb-2">
+          <div className="flex items-center gap-2">
+            <GraduationCap className="w-4 h-4 text-cyan-400" />
+            <span className="text-xs sm:text-sm font-bold text-slate-300">
+              Faculty of Veterinary Sciences, Mahasarakham University
+            </span>
+          </div>
+          <p className="text-xs text-slate-500">
+            Developed by <span className="font-semibold text-cyan-400">DVM Wilasinee Surasa</span>
+          </p>
+        </div>
+        <p className="text-[11px] text-slate-600 font-mono">© 2026 JIBJOYVET · All rights reserved</p>
+      </footer>
+
+      {/* ── LOGIN MODAL (Virus Go Dark Glassmorphic) ── */}
       {showLogin && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fade-in"
           onClick={() => setShowLogin(false)}
         >
           <div
-            className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-8 relative"
-            onClick={e => e.stopPropagation()}
+            className="relative glass bg-slate-950/95 border border-cyan-500/40 rounded-3xl shadow-[0_0_50px_rgba(6,182,212,0.25)] w-full max-w-sm p-7 sm:p-8"
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* Close */}
+            {/* Ambient Modal Glow */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
+
+            {/* Close Button */}
             <button
               onClick={() => setShowLogin(false)}
-              className="absolute top-4 right-4 p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white hover:bg-slate-900 rounded-xl transition-colors"
             >
               ✕
             </button>
 
             {/* Icon */}
-            <div className="w-14 h-14 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-pink-200 mx-auto mb-5">
-              <MapPin className="w-7 h-7 text-white" strokeWidth={1.5} />
+            <div className="w-14 h-14 bg-gradient-to-br from-cyan-500/20 to-emerald-500/10 border border-cyan-500/40 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/20 mx-auto mb-4">
+              <MapPin className="w-7 h-7 text-cyan-400" strokeWidth={2} />
             </div>
 
-            <h3 className="text-xl font-black text-gray-800 text-center mb-1">Vet Checkin</h3>
-            <p className="text-gray-500 text-sm text-center mb-6">Sign in with your MSU Google account</p>
+            <h3 className="text-xl font-black text-white text-center mb-1 uppercase tracking-tight">
+              VET<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">CHECK</span>
+            </h3>
+            <p className="text-slate-400 text-xs text-center mb-6">
+              เข้าสู่ระบบด้วยบัญชี Google ของมหาวิทยาลัย
+            </p>
 
             <button
               onClick={loginWithGoogle}
-              className="w-full group flex items-center justify-center gap-3 bg-white border-2 border-gray-200 hover:border-pink-300 hover:bg-pink-50 text-gray-700 font-bold py-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md"
+              className="w-full flex items-center justify-center gap-3 bg-slate-900 hover:bg-slate-850 border border-cyan-500/40 hover:border-cyan-400 text-white font-bold py-3.5 px-4 rounded-2xl transition-all shadow-lg active:scale-95 group"
             >
-              <div className="bg-white rounded-lg p-0.5 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-lg p-1 shadow-sm shrink-0">
                 <GoogleIcon />
               </div>
-              Continue with Google
+              <span className="text-xs sm:text-sm font-bold text-slate-200 group-hover:text-white">
+                Continue with Google
+              </span>
             </button>
 
-            <p className="text-center text-xs text-gray-400 mt-4 flex items-center justify-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-green-400" />
-              Use your <span className="font-semibold text-pink-400 mx-1">@msu.ac.th</span> account only
-            </p>
+            <div className="mt-5 pt-4 border-t border-slate-800 text-center text-xs text-slate-400 flex items-center justify-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>
+                ใช้อีเมล <span className="font-bold text-cyan-300 font-mono">@msu.ac.th</span> เท่านั้น
+              </span>
+            </div>
           </div>
         </div>
       )}
-
     </main>
   );
 }

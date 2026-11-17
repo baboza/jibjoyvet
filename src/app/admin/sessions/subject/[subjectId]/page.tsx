@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft, ChevronRight, Loader2, CheckCircle, Clock, XCircle,
-  Users, AlertCircle, MapPin, Calendar, Plus, X, Save
+  Users, AlertCircle, MapPin, Calendar, Plus, X, Save, Sparkles, BookOpen
 } from "lucide-react";
 
 interface SessionItem {
@@ -123,7 +123,6 @@ export default function SubjectSessionsPage() {
   };
 
   const openAddForm = () => {
-    // Set default date to today
     const today = new Date().toISOString().slice(0, 10);
     setForm({ ...EMPTY_FORM, sessionDate: today });
     setFormError("");
@@ -193,44 +192,72 @@ export default function SubjectSessionsPage() {
 
   return (
     <AppLayout>
-      <div className="max-w-4xl mx-auto px-4 py-6">
+      {/* Ambient background glows */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+        <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-cyan-500/10 rounded-full blur-[140px]" />
+        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-purple-500/10 rounded-full blur-[140px]" />
+      </div>
+
+      <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-3">
             <button
               onClick={() => router.back()}
-              className="p-2 rounded-xl hover:bg-pink-100 text-gray-500 transition-colors"
+              className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white transition-all shadow-sm"
+              aria-label="ย้อนกลับ"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div>
               {subject ? (
                 <>
-                  <h1 className="text-lg font-bold text-gray-800">{subject.code} — {subject.name}</h1>
-                  <p className="text-sm text-gray-400">ภาคเรียน {subject.term} · {sessions.length} คลาสเรียน</p>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+                      {subject.code}
+                    </span>
+                    <span className="text-xs text-slate-400">ภาคเรียน {subject.term}</span>
+                  </div>
+                  <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                    {subject.name}
+                  </h1>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    ทั้งหมด {sessions.length} คลาสเรียนในวิชานี้
+                  </p>
                 </>
               ) : (
-                <div className="h-5 w-48 bg-gray-200 rounded animate-pulse" />
+                <div className="space-y-2">
+                  <div className="h-5 w-48 bg-slate-800 rounded animate-pulse" />
+                  <div className="h-4 w-32 bg-slate-800/60 rounded animate-pulse" />
+                </div>
               )}
             </div>
           </div>
           
           <button
             onClick={openAddForm}
-            className="flex items-center gap-2 bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-xl text-sm transition-colors shadow-sm"
+            className="flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-sm transition-all shadow-lg shadow-cyan-500/20 active:scale-95"
           >
-            <Plus className="w-4 h-4" />
-            เพิ่มคลาส
+            <Plus className="w-4 h-4 stroke-[2.5]" />
+            เพิ่มคลาสเรียน
           </button>
         </div>
 
         {/* Add Modal */}
         {showForm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
-                <h3 className="text-lg font-bold text-gray-800">เพิ่มคลาสเรียนใหม่</h3>
-                <button onClick={closeForm} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
+            <div className="bg-slate-900/95 border border-slate-800 rounded-3xl shadow-2xl shadow-cyan-950/50 w-full max-w-md max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between p-6 border-b border-slate-800 sticky top-0 bg-slate-900/95 backdrop-blur-xl z-10">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                    <Plus className="w-4 h-4" />
+                  </div>
+                  <h3 className="text-lg font-bold text-white">เพิ่มคลาสเรียนใหม่</h3>
+                </div>
+                <button
+                  onClick={closeForm}
+                  className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                >
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -238,64 +265,74 @@ export default function SubjectSessionsPage() {
               <div className="p-6 space-y-4">
                 {/* Date */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">วันที่เรียน</label>
+                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                    วันที่เรียน
+                  </label>
                   <input
                     type="date"
                     value={form.sessionDate}
                     onChange={(e) => setForm({ ...form, sessionDate: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-pink-400 text-sm"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 focus:outline-none focus:border-cyan-500/60 text-slate-100 text-sm"
                   />
                 </div>
 
                 {/* Times */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">เวลาเริ่ม</label>
+                    <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                      เวลาเริ่ม
+                    </label>
                     <input
                       type="time"
                       value={form.startTime}
                       onChange={(e) => setForm({ ...form, startTime: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-pink-400 text-sm"
+                      className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 focus:outline-none focus:border-cyan-500/60 text-slate-100 text-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">เวลาสิ้นสุด</label>
+                    <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                      เวลาสิ้นสุด
+                    </label>
                     <input
                       type="time"
                       value={form.endTime}
                       onChange={(e) => setForm({ ...form, endTime: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-pink-400 text-sm"
+                      className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 focus:outline-none focus:border-cyan-500/60 text-slate-100 text-sm"
                     />
                   </div>
                 </div>
 
                 {/* Late limit */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">สายหลังเวลา</label>
+                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                    สายหลังเวลา
+                  </label>
                   <input
                     type="time"
                     value={form.lateTime}
                     onChange={(e) => setForm({ ...form, lateTime: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-pink-400 text-sm"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 focus:outline-none focus:border-cyan-500/60 text-slate-100 text-sm"
                   />
                 </div>
 
                 {/* Location */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">สถานที่เรียน</label>
+                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                    สถานที่เรียน
+                  </label>
                   {locations.length === 0 ? (
-                    <div className="text-sm text-red-500 bg-red-50 p-3 rounded-xl border border-red-100">
+                    <div className="text-sm text-rose-400 bg-rose-500/10 p-3 rounded-xl border border-rose-500/20">
                       ยังไม่มีสถานที่ในระบบ กรุณาเพิ่มสถานที่ก่อน
                     </div>
                   ) : (
                     <select
                       value={form.locationId}
                       onChange={(e) => setForm({ ...form, locationId: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-pink-400 text-sm bg-white"
+                      className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 focus:outline-none focus:border-cyan-500/60 text-slate-100 text-sm"
                     >
-                      <option value="">-- เลือกสถานที่ --</option>
+                      <option value="" className="bg-slate-900">-- เลือกสถานที่ --</option>
                       {locations.map((loc) => (
-                        <option key={loc.id} value={loc.id}>{loc.name}</option>
+                        <option key={loc.id} value={loc.id} className="bg-slate-900">{loc.name}</option>
                       ))}
                     </select>
                   )}
@@ -303,37 +340,39 @@ export default function SubjectSessionsPage() {
 
                 {/* Status */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">สถานะการเช็คชื่อ</label>
+                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                    สถานะการเช็คชื่อ
+                  </label>
                   <select
                     value={form.status}
                     onChange={(e) => setForm({ ...form, status: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-pink-400 text-sm bg-white"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 focus:outline-none focus:border-cyan-500/60 text-slate-100 text-sm"
                   >
-                    <option value="active">เปิดรับเช็คชื่อ (Active)</option>
-                    <option value="inactive">ปิดรับเช็คชื่อ</option>
+                    <option value="active" className="bg-slate-900">เปิดรับเช็คชื่อ (Active)</option>
+                    <option value="inactive" className="bg-slate-900">ปิดรับเช็คชื่อ (Inactive)</option>
                   </select>
                 </div>
 
                 {/* Error */}
                 {formError && (
-                  <div className="flex items-center gap-2 bg-red-50 text-red-600 rounded-xl px-4 py-3 text-sm">
+                  <div className="flex items-center gap-2 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl px-4 py-3 text-xs">
                     <AlertCircle className="w-4 h-4 flex-shrink-0" />
                     {formError}
                   </div>
                 )}
               </div>
 
-              <div className="flex gap-3 p-6 pt-0 sticky bottom-0 bg-white border-t border-gray-50 mt-4 pb-6">
+              <div className="flex gap-3 p-6 pt-0 sticky bottom-0 bg-slate-900/95 border-t border-slate-800/80 mt-4 pb-6">
                 <button
                   onClick={closeForm}
-                  className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium transition-colors"
+                  className="flex-1 py-2.5 rounded-xl border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800/60 text-sm font-semibold transition-colors"
                 >
                   ยกเลิก
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={saving || locations.length === 0}
-                  className="flex-1 py-2.5 rounded-xl bg-pink-500 hover:bg-pink-600 text-white text-sm font-bold transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 text-sm font-bold transition-all flex items-center justify-center gap-2 disabled:opacity-50 shadow-lg shadow-cyan-500/20"
                 >
                   {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                   บันทึกคลาส
@@ -343,18 +382,18 @@ export default function SubjectSessionsPage() {
           </div>
         )}
 
-        {/* Summary bar */}
+        {/* Summary stats */}
         {!loading && sessions.length > 0 && (
-          <div className="bg-white rounded-2xl border border-pink-100 shadow-sm p-4 mb-5 grid grid-cols-4 divide-x divide-gray-100">
+          <div className="bg-slate-900/75 border border-slate-800 backdrop-blur-xl rounded-2xl shadow-xl shadow-black/20 p-5 mb-6 grid grid-cols-2 md:grid-cols-4 gap-4 divide-y md:divide-y-0 md:divide-x divide-slate-800">
             {[
-              { label: "คลาสทั้งหมด", value: sessions.length, color: "text-gray-800" },
-              { label: "นิสิตลงทะเบียน", value: sessions[0]?.totalEnrolled || 0, color: "text-gray-800" },
-              { label: "เช็คชื่อรวม", value: sessions.reduce((s, r) => s + r.checkedIn, 0), color: "text-green-600" },
-              { label: "สายรวม", value: sessions.reduce((s, r) => s + r.late, 0), color: "text-amber-500" },
+              { label: "คลาสทั้งหมด", value: sessions.length, color: "text-white" },
+              { label: "นิสิตลงทะเบียน", value: sessions[0]?.totalEnrolled || 0, color: "text-cyan-400" },
+              { label: "เช็คชื่อรวม", value: sessions.reduce((s, r) => s + r.checkedIn, 0), color: "text-emerald-400" },
+              { label: "สายรวม", value: sessions.reduce((s, r) => s + r.late, 0), color: "text-amber-400" },
             ].map(({ label, value, color }) => (
-              <div key={label} className="text-center px-3">
-                <p className={`text-2xl font-bold ${color}`}>{value}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{label}</p>
+              <div key={label} className="text-center pt-3 md:pt-0 md:px-3">
+                <p className={`text-2xl lg:text-3xl font-extrabold ${color} font-mono tracking-tight`}>{value}</p>
+                <p className="text-xs text-slate-400 mt-1 uppercase tracking-wider">{label}</p>
               </div>
             ))}
           </div>
@@ -362,90 +401,116 @@ export default function SubjectSessionsPage() {
 
         {/* Session list */}
         {loading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 text-pink-400 animate-spin" />
+          <div className="flex flex-col items-center justify-center py-24 gap-3">
+            <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+            <p className="text-xs text-slate-400 font-mono">กำลังโหลดคลาสเรียน...</p>
           </div>
         ) : sessions.length === 0 ? (
-          <div className="bg-white rounded-2xl p-12 text-center border border-pink-100">
-            <p className="text-gray-400">ยังไม่มีคลาสเรียนในวิชานี้</p>
+          <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-14 text-center">
+            <Calendar className="w-10 h-10 text-slate-600 mx-auto mb-3" />
+            <p className="text-slate-400 font-medium">ยังไม่มีคลาสเรียนในวิชานี้</p>
+            <p className="text-xs text-slate-600 mt-1">กดปุ่ม "เพิ่มคลาสเรียน" ด้านบนเพื่อเริ่มกำหนดตารางเรียน</p>
           </div>
         ) : (
           <div className="flex flex-col gap-3">
-            {sessions.map((s, i) => (
-              <Link
-                key={s.id}
-                href={`/admin/sessions/${s.id}`}
-                className="bg-white rounded-2xl border border-pink-100 hover:border-pink-300 hover:shadow-md transition-all group overflow-hidden"
-              >
-                <div className="flex items-stretch">
-                  {/* Index + status bar */}
-                  <div className={`w-1.5 flex-shrink-0 ${s.status === "active" ? "bg-green-400" : "bg-gray-200"}`} />
+            {sessions.map((s, i) => {
+              const attendanceRate = s.totalEnrolled ? Math.round((s.checkedIn / s.totalEnrolled) * 100) : 0;
+              return (
+                <Link
+                  key={s.id}
+                  href={`/admin/sessions/${s.id}`}
+                  className="bg-slate-900/75 border border-slate-800 hover:border-cyan-500/40 rounded-2xl transition-all duration-200 group overflow-hidden shadow-lg shadow-black/20 hover:shadow-cyan-950/20"
+                >
+                  <div className="flex items-stretch">
+                    {/* Index + status accent strip */}
+                    <div
+                      className={`w-1.5 flex-shrink-0 transition-colors ${
+                        s.status === "active"
+                          ? "bg-gradient-to-b from-emerald-400 to-cyan-500"
+                          : "bg-slate-800"
+                      }`}
+                    />
 
-                  <div className="flex-1 p-4">
-                    <div className="flex items-start justify-between gap-4">
-                      {/* Left: date + info */}
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1.5">
-                          <p className="font-bold text-gray-800 flex items-center gap-1.5">
-                            <Calendar className="w-4 h-4 text-pink-400" />
-                            คลาสที่ {sessions.length - i} — {s.sessionDate}
-                          </p>
-                          {s.status === "active" && (
-                            <span className="bg-green-100 text-green-600 text-[10px] px-2 py-0.5 rounded-full font-bold">
-                              ACTIVE
+                    <div className="flex-1 p-5">
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                        {/* Left: date + info */}
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="font-bold text-white flex items-center gap-2 group-hover:text-cyan-300 transition-colors text-base">
+                              <Calendar className="w-4 h-4 text-cyan-400" />
+                              คลาสที่ {sessions.length - i} — {s.sessionDate}
                             </span>
-                          )}
+                            {s.status === "active" ? (
+                              <span className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-mono font-bold uppercase tracking-wider">
+                                ACTIVE
+                              </span>
+                            ) : (
+                              <span className="bg-slate-800 text-slate-400 text-[10px] px-2 py-0.5 rounded-full font-mono uppercase tracking-wider">
+                                CLOSED
+                              </span>
+                            )}
+                          </div>
+                          
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400 font-mono">
+                            <span className="flex items-center gap-1.5">
+                              <Clock className="w-3.5 h-3.5 text-cyan-400" /> {s.startTime} – {s.endTime}
+                            </span>
+                            <span className="flex items-center gap-1.5 text-amber-400/90">
+                              <AlertCircle className="w-3.5 h-3.5" /> สายหลัง {s.lateTime}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-2">
+                            <MapPin className="w-3.5 h-3.5 text-slate-500" />
+                            <span>{s.locationName}</span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-3 text-sm text-gray-500">
-                          <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {s.startTime}–{s.endTime}</span>
-                          <span className="flex items-center gap-1"><AlertCircle className="w-3.5 h-3.5 text-amber-400" /> สายหลัง {s.lateTime}</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-xs text-gray-400 mt-0.5">
-                          <MapPin className="w-3.5 h-3.5" /> {s.locationName}
+
+                        {/* Right: attendance chips */}
+                        <div className="flex flex-col sm:items-end gap-2 flex-shrink-0">
+                          <div className="flex flex-wrap gap-1.5">
+                            <span className="flex items-center gap-1 text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-lg">
+                              <CheckCircle className="w-3 h-3" />
+                              {onTime(s)} ตรงเวลา
+                            </span>
+                            <span className="flex items-center gap-1 text-xs font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-lg">
+                              <Clock className="w-3 h-3" />
+                              {s.late} สาย
+                            </span>
+                            <span className="flex items-center gap-1 text-xs font-semibold text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2.5 py-1 rounded-lg">
+                              <XCircle className="w-3 h-3" />
+                              {absent(s)} ขาด
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1 text-xs text-slate-400 font-mono">
+                            <Users className="w-3.5 h-3.5 text-slate-500" />
+                            <span>{s.checkedIn} จาก {s.totalEnrolled} คน</span>
+                          </div>
                         </div>
                       </div>
 
-                      {/* Right: attendance chips */}
-                      <div className="flex flex-col gap-1.5 items-end flex-shrink-0">
-                        <div className="flex gap-2">
-                          <span className="flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-50 px-2.5 py-1 rounded-full">
-                            <CheckCircle className="w-3 h-3" />
-                            {onTime(s)}
-                          </span>
-                          <span className="flex items-center gap-1 text-xs font-semibold text-amber-500 bg-amber-50 px-2.5 py-1 rounded-full">
-                            <Clock className="w-3 h-3" />
-                            {s.late}
-                          </span>
-                          <span className="flex items-center gap-1 text-xs font-semibold text-red-400 bg-red-50 px-2.5 py-1 rounded-full">
-                            <XCircle className="w-3 h-3" />
-                            {absent(s)}
-                          </span>
+                      {/* Progress bar */}
+                      <div className="mt-4 pt-3 border-t border-slate-800/80">
+                        <div className="flex justify-between items-center text-[11px] mb-1.5">
+                          <span className="text-slate-400 font-mono">อัตราการเข้าเรียน</span>
+                          <span className="text-cyan-400 font-mono font-bold">{attendanceRate}%</span>
                         </div>
-                        <div className="flex items-center gap-1 text-xs text-gray-400">
-                          <Users className="w-3 h-3" />
-                          {s.checkedIn}/{s.totalEnrolled} คน
+                        <div className="h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 rounded-full transition-all duration-300"
+                            style={{ width: `${attendanceRate}%` }}
+                          />
                         </div>
                       </div>
                     </div>
 
-                    {/* Progress bar */}
-                    <div className="mt-3 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full transition-all"
-                        style={{ width: `${s.totalEnrolled ? (s.checkedIn / s.totalEnrolled) * 100 : 0}%` }}
-                      />
+                    <div className="flex items-center pr-4">
+                      <ChevronRight className="w-5 h-5 text-slate-600 group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-all" />
                     </div>
-                    <p className="text-[10px] text-gray-400 mt-1 text-right">
-                      เช็คชื่อแล้ว {s.totalEnrolled ? Math.round((s.checkedIn / s.totalEnrolled) * 100) : 0}%
-                    </p>
                   </div>
-
-                  <div className="flex items-center pr-4">
-                    <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-pink-400 transition-colors" />
-                  </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>
