@@ -16,7 +16,11 @@ import {
   Radio,
   ExternalLink,
   ChevronRight,
-  Heart
+  Heart,
+  BookOpen,
+  Award,
+  Layers,
+  Activity
 } from "lucide-react";
 
 // Google icon component
@@ -95,11 +99,11 @@ export default function Home() {
         </nav>
 
         {/* ── HERO SECTION ── */}
-        <section className="text-center px-4 sm:px-6 pt-12 sm:pt-16 pb-16 max-w-4xl mx-auto">
+        <section className="text-center px-4 sm:px-6 pt-12 sm:pt-16 pb-12 max-w-4xl mx-auto">
           {/* Top Pill */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/80 border border-cyan-500/40 backdrop-blur-xl text-xs font-bold text-cyan-400 shadow-[0_0_25px_rgba(6,182,212,0.25)] uppercase tracking-wide mb-6">
             <Radio className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-            <span>AI-POWERED VET EDUCATION PLATFORM</span>
+            <span>AI-POWERED VET EDUCATION &amp; ATTENDANCE PLATFORM</span>
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
           </div>
 
@@ -130,6 +134,32 @@ export default function Home() {
                 {label}
               </span>
             ))}
+          </div>
+        </section>
+
+        {/* ── STATS COUNTER STRIP (Virus Go Style) ── */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 p-4 sm:p-6 rounded-2xl glass bg-slate-900/60 border border-slate-800 backdrop-blur-xl shadow-xl text-center">
+            <div>
+              <p className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300 font-mono">15 บท</p>
+              <p className="text-xs text-slate-200 font-bold mt-1">Curriculum Chapters</p>
+              <p className="text-[11px] text-slate-400 hidden sm:block mt-0.5">เนื้อหาครอบคลุมครบถ้วน</p>
+            </div>
+            <div>
+              <p className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-mono">150 ข้อ</p>
+              <p className="text-xs text-slate-200 font-bold mt-1">Balanced Questions</p>
+              <p className="text-[11px] text-slate-400 hidden sm:block mt-0.5">โจทย์กระชับ ตอบทันใจ</p>
+            </div>
+            <div>
+              <p className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-300 font-mono">9 โหมด</p>
+              <p className="text-xs text-slate-200 font-bold mt-1">Active Game Modes</p>
+              <p className="text-[11px] text-slate-400 hidden sm:block mt-0.5">ภารกิจหลากหลายสไตล์</p>
+            </div>
+            <div>
+              <p className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400 font-mono">Smart GPS</p>
+              <p className="text-xs text-slate-200 font-bold mt-1">Campus Attendance</p>
+              <p className="text-[11px] text-slate-400 hidden sm:block mt-0.5">เช็คชื่อแม่นยำรายวิชา</p>
+            </div>
           </div>
         </section>
 
@@ -215,14 +245,15 @@ export default function Home() {
                   เกมการเรียนรู้ <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Virus Go</span>
                 </h2>
                 <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                  แพลตฟอร์ม Game-Based Learning เปลี่ยน 15 บทเรียนวิชาไวรัสวิทยาสัตวแพทย์ให้เป็นภารกิจเกมสุดท้าทาย สนุก กระชับ ตอบทันใจ
+                  แพลตฟอร์ม Game-Based Learning เปลี่ยน 15 บทเรียนวิชาไวรัสวิทยาสัตวแพทย์ให้เป็นภารกิจเกมสุดท้าทาย สนุก กระชับ ตอบทันใจ ไม่เครียด
                 </p>
 
                 <div className="space-y-2.5 mb-8">
                   {[
-                    "ภารกิจแล็บสืบสวนโรคและเคสทางคลินิก (Lab Detective)",
-                    "ระบบแข่งขันตอบคำถามในห้องเรียนแบบเรียลไทม์",
-                    "จำลองการระบาดของไวรัสเพื่อฝึกวางแผนรับมือ",
+                    "Time Attack 60s ตอบคำถามไวรัสวิทยา 15 บทเรียน",
+                    "Multiplayer Classroom Battle ประลองความรู้เรียลไทม์",
+                    "Strategy Bio-Defense & Outbreak ควบคุมโรคระบาด",
+                    "Lab Detective วินิจฉัยเคสจากผลแล็บ PCR & ELISA",
                   ].map((f) => (
                     <div key={f} className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-300">
                       <CheckCircle className="w-4 h-4 text-purple-400 flex-shrink-0" />
@@ -242,7 +273,7 @@ export default function Home() {
                   className="relative w-full bg-slate-950 hover:bg-slate-900 border border-purple-400/50 text-white font-extrabold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-xl active:scale-[0.98]"
                 >
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-fuchsia-200 to-pink-300 text-sm tracking-wide">
-                    เปิดเล่น Virus Go
+                    เปิดเล่น Virus Go (เว็บหลัก)
                   </span>
                   <ExternalLink className="w-4 h-4 text-purple-400" />
                 </a>
@@ -309,6 +340,75 @@ export default function Home() {
           </div>
 
         </section>
+
+        {/* ── INSTRUCTOR & DEVELOPER PROFILE SECTION (Virus Go Style) ── */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-20">
+          <div className="relative rounded-3xl glass bg-slate-900/85 border border-cyan-500/30 hover:border-cyan-400/60 transition-all duration-300 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden">
+            {/* Ambient radial glow inside card */}
+            <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-cyan-500/10 via-emerald-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+            <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 sm:gap-8 md:gap-10">
+              {/* Left: Lecturer photo with cyberpunk glow ring */}
+              <div className="relative group shrink-0">
+                <div className="absolute -inset-1.5 bg-gradient-to-tr from-cyan-500 via-teal-400 to-emerald-400 rounded-2xl blur-md opacity-75 group-hover:opacity-100 transition duration-300" />
+                <div className="relative w-44 h-56 sm:w-52 sm:h-64 rounded-2xl overflow-hidden border-2 border-cyan-400/60 bg-slate-950 shadow-2xl">
+                  <img
+                    src="/images/lecturer-wilasinee.jpg"
+                    alt="Lecturer Wilasinee Surasa, D.V.M. - ผู้พัฒนาระบบ"
+                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-slate-950/90 border border-cyan-400/50 px-3.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-black uppercase text-cyan-300 font-mono tracking-wider shadow-md whitespace-nowrap">
+                  SYSTEM DEVELOPER
+                </div>
+              </div>
+
+              {/* Right: Lecturer info & Bio */}
+              <div className="flex-1 text-center md:text-left space-y-3 sm:space-y-4">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-[11px] sm:text-xs font-bold uppercase tracking-wider">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>ผู้พัฒนาระบบ &amp; อาจารย์ผู้รับผิดชอบรายวิชา</span>
+                </div>
+
+                <div>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-wide">
+                    Lecturer Wilasinee Surasa, D.V.M.
+                  </h3>
+                  <p className="text-xs sm:text-sm font-semibold text-emerald-400 mt-1">
+                    อาจารย์ สพ.ญ. วิลาสินี สุราสา
+                  </p>
+                  <p className="text-[11px] sm:text-xs text-slate-400 font-mono mt-0.5">
+                    Faculty of Veterinary Medicine • Department of Veterinary Virology
+                  </p>
+                </div>
+
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-normal">
+                  ผู้ออกแบบและพัฒนาแพลตฟอร์ม <strong>VETVIRUS GO</strong> และระบบ <strong>JIBJOY VETCHECK</strong> เพื่อยกระดับการจัดการเรียนการสอนและเช็คชื่อเข้าชั้นเรียน ควบคู่กับรูปแบบ Game-Based Learning วิชาไวรัสวิทยาสัตวแพทย์ ที่เน้นความเข้าใจเชิงลึก ฝึกการคิดวิเคราะห์เคสทางคลินิก และสร้างแรงบันดาลใจในการเรียนรู้แก่นิสิตสัตวแพทย์
+                </p>
+
+                <div className="pt-1 sm:pt-2 flex flex-wrap items-center justify-center md:justify-start gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-[10px] sm:text-xs font-medium text-slate-300">
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+                    15 Chapters Curriculum
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-[10px] sm:text-xs font-medium text-cyan-400">
+                    <CheckCircle className="w-3.5 h-3.5 text-cyan-400" />
+                    150 Balanced Question Bank
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-[10px] sm:text-xs font-medium text-purple-300">
+                    <CheckCircle className="w-3.5 h-3.5 text-purple-400" />
+                    Interactive Case Studies
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-[10px] sm:text-xs font-medium text-amber-300">
+                    <CheckCircle className="w-3.5 h-3.5 text-amber-400" />
+                    Smart GPS Campus Gateway
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </div>
 
       {/* ── FOOTER ── */}
@@ -321,7 +421,7 @@ export default function Home() {
             </span>
           </div>
           <p className="text-xs text-slate-500">
-            Developed by <span className="font-semibold text-cyan-400">DVM Wilasinee Surasa</span>
+            Designed &amp; Developed by <span className="font-semibold text-cyan-400">Lecturer Wilasinee Surasa, D.V.M.</span>
           </p>
         </div>
         <p className="text-[11px] text-slate-600 font-mono">© 2026 JIBJOYVET · All rights reserved</p>
