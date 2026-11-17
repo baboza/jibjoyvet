@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "GPS Attendance App",
-  description: "Student attendance tracking using GPS",
+  title: "wilasinee.site | VetCheck & Learning Hub",
+  description: "Veterinary Medicine Learning & GPS Attendance Platform - Faculty of Veterinary Sciences, Mahasarakham University",
 };
 
 export default function RootLayout({

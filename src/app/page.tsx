@@ -72,9 +72,8 @@ export default function Home() {
               <Sparkles className="w-4 h-4 text-cyan-400" />
             </div>
             <div className="flex flex-col">
-              <span className="font-black text-white text-lg tracking-tight uppercase flex items-center gap-1">
-                JIBJOY<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">VET</span>
-                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-300">HUB</span>
+              <span className="font-black text-white text-lg tracking-tight flex items-center gap-0.5">
+                wilasinee<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">.site</span>
               </span>
               <span className="text-[9px] text-slate-400 uppercase tracking-widest font-mono hidden sm:inline">
                 Faculty of Veterinary Sciences · MSU
@@ -383,7 +382,7 @@ export default function Home() {
                 </div>
 
                 <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-normal">
-                  ผู้ออกแบบและพัฒนาแพลตฟอร์ม <strong>VETVIRUS GO</strong> และระบบ <strong>JIBJOY VETCHECK</strong> เพื่อยกระดับการจัดการเรียนการสอนและเช็คชื่อเข้าชั้นเรียน ควบคู่กับรูปแบบ Game-Based Learning วิชาไวรัสวิทยาสัตวแพทย์ ที่เน้นความเข้าใจเชิงลึก ฝึกการคิดวิเคราะห์เคสทางคลินิก และสร้างแรงบันดาลใจในการเรียนรู้แก่นิสิตสัตวแพทย์
+                  ผู้ออกแบบและพัฒนาแพลตฟอร์ม <strong>VETVIRUS GO</strong> และระบบ <strong>VETCHECK (wilasinee.site)</strong> เพื่อยกระดับการจัดการเรียนการสอนและเช็คชื่อเข้าชั้นเรียน ควบคู่กับรูปแบบ Game-Based Learning วิชาไวรัสวิทยาสัตวแพทย์ ที่เน้นความเข้าใจเชิงลึก ฝึกการคิดวิเคราะห์เคสทางคลินิก และสร้างแรงบันดาลใจในการเรียนรู้แก่นิสิตสัตวแพทย์
                 </p>
 
                 <div className="pt-1 sm:pt-2 flex flex-wrap items-center justify-center md:justify-start gap-2">
@@ -424,7 +423,7 @@ export default function Home() {
             Designed &amp; Developed by <span className="font-semibold text-cyan-400">Lecturer Wilasinee Surasa, D.V.M.</span>
           </p>
         </div>
-        <p className="text-[11px] text-slate-600 font-mono">© 2026 JIBJOYVET · All rights reserved</p>
+        <p className="text-[11px] text-slate-600 font-mono">© 2026 wilasinee.site · All rights reserved</p>
       </footer>
 
       {/* ── LOGIN MODAL (Virus Go Dark Glassmorphic) ── */}
